@@ -27,3 +27,4 @@ Unity/Library/
 Unity/Assembly-CSharp-firstpass-vs.csproj
 Unity/Assembly-CSharp-firstpass.csproj
 .gitignore.orig
+Unity/Assets/Scripts.meta.orig
