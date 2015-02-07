@@ -6,7 +6,11 @@ public class MusicManager : MonoBehaviour {
 
     public float countdownToStart = 2f;
 
-    List<AudioClip> musicTracks;
+    public MusicWithInformation beginningTrack;
+    public MusicWithInformation endingTrack;
+    
+    [SerializeField]
+    public List<MusicWithInformation> musicTracks;
 
 
 	void Start () {
@@ -28,4 +32,12 @@ public class MusicManager : MonoBehaviour {
 
         yield break;
     }
+}
+
+[System.Serializable]
+public class MusicWithInformation {
+    public string name = "";
+    public AudioClip musicTrack;
+    public float BPM = 120f;
+
 }

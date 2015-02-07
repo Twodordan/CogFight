@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum GameState { Beginning, Playing, Ended };
+public enum GameState { Beginning, Playing, Paused, Ended };
 
 public class StateManager : MonoBehaviour {
 
