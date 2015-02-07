@@ -6,6 +6,7 @@ public class EventManager : MonoBehaviour {
     public delegate void BasicAction();
     public static event BasicAction OnGameStart;
     public static event BasicAction OnGameEnd;
+    public static event BasicAction OnDifficultyChange;
 
     public static event BasicAction OnMusic_Beat;
     public static event BasicAction OnMusic_Bar;
@@ -20,6 +21,10 @@ public class EventManager : MonoBehaviour {
 
     public static void EndGame() {
         OnGameEnd();
+    }
+
+    public static void DifficultyChanged() {
+        OnDifficultyChange();
     }
 
     public static void Music_Beat() {

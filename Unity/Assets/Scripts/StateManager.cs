@@ -7,6 +7,7 @@ public class StateManager : MonoBehaviour {
 
     static StateManager singleton;
     GameState state = GameState.Beginning;
+    int difficulty = 0;
 
     void Awake() {
         singleton = this;
@@ -17,6 +18,11 @@ public class StateManager : MonoBehaviour {
     public static GameState State {
         get { return singleton.state; ; }
         set { singleton.state = value; Debug.Log("New game state: " + singleton.state); }
+    }
+
+    public static int CurrentDifficulty {
+        get { return singleton.difficulty; }
+        set { singleton.difficulty = value; EventManager.DifficultyChanged(); Debug.Log("New difficulty set: " + singleton.difficulty); }
     }
 
     void SetStateToPlaying() {
