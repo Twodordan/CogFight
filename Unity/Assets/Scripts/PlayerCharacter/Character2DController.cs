@@ -3,7 +3,11 @@ using System.Collections;
 
 public class Character2DController : IPausable {
 
-
+	public bool switchInProgress{
+		get{
+			return switchInProgress_;
+		}
+	}
 	public PlayerNumber playerNumber{
 		get{
 			return playerNumber_;
@@ -35,7 +39,7 @@ public class Character2DController : IPausable {
 	[SerializeField]
 	private PlayerNumber playerNumber_;
 	 
-
+	private bool switchInProgress_ = false;
 
 
 	void Start () {
@@ -54,7 +58,7 @@ public class Character2DController : IPausable {
 
 	public override void Pause(bool pause){
 
-		character.Pause();
+		character.Pause(pause);
 
 		base.Pause(pause);
 	}
@@ -83,27 +87,47 @@ public class Character2DController : IPausable {
 
 	}
 
-	public bool switchToPlayer(PlayerNumber number, Character2DController other){
-		Debug.Log("SWITCH; number: "+number+"; != playerNumber: "+playerNumber);
-		if(number != playerNumber){
+	public bool switchToPlayer(PlayerNumber number, Character2DController other, float delaySeconds){
+
+		if(number != playerNumber && !(switchInProgress || other.switchInProgress)){
+
+			switchInProgress_ = true;
 
 			//handle necessary swaps
 
-			//swap mesh TODO: do it properly once we have chars
-			Transform charMeshParent = characterMesh.transform.parent;
-			other.setNewCharacterMesh(characterMesh, other.characterMesh.transform.parent);
-			setNewCharacterMesh(other.characterMesh, charMeshParent);
+			//TODO: start to play swap animation
 
-
-			//TODO:play swap animation (delay the swap too)
-
-			other.playerNumber = this.playerNumber;
-			playerNumber = number;
-
+			//swap the chars in the middle of the animation.
+			object[] parms = new object[3]{number, other, delaySeconds};
+			StartCoroutine(delaySwitch(parms));
+			//delaySwitch();
+			
+			//note: this doesn't actually check if the swap was successful, but if the references are there it will certainly work.
 			return true;
 		}
 		else
 			return false;
+	}
+
+	//params PlayerNumber number, Character2DController other, float delaySeconds
+	public IEnumerator delaySwitch(object[] parms){
+		PlayerNumber number = (PlayerNumber)parms[0];
+		Character2DController other = (Character2DController)parms[1];
+		float delaySeconds = (float)parms[2];
+
+		Debug.Log("SWITCH in progress; number: "+number+"; != playerNumber: "+
+		          playerNumber+"; delaySeconds: "+delaySeconds+
+		          ";");
+		yield return new WaitForSeconds(delaySeconds);
+
+		//swap mesh 
+		Transform charMeshParent = characterMesh.transform.parent;
+		other.setNewCharacterMesh(characterMesh, other.characterMesh.transform.parent);
+		setNewCharacterMesh(other.characterMesh, charMeshParent);
+
+		//swap IDs
+		other.playerNumber = this.playerNumber;
+		playerNumber = number;
 	}
 
 	public void setNewCharacterMesh(GameObject characterMesh, Transform parent){
@@ -112,6 +136,8 @@ public class Character2DController : IPausable {
 		characterMesh.transform.localPosition = Vector3.zero;
 		characterMesh.transform.localRotation = Quaternion.identity;
 
+		switchInProgress_ = false;
+		Debug.Log("SWITCH Complete (can switch again)");
 	}
 
 }

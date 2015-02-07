@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Character2D : MonoBehaviour{
+public class Character2D : IPausable{
 
 	[SerializeField] Transform characterPivot;
 	[SerializeField] float jumpPower = 12;								//determines the jump force applied when jumping (and therefore the jump height)
@@ -61,8 +61,8 @@ public class Character2D : MonoBehaviour{
 	Vector3 velocity;
 	IComparer rayHitComparer;
 
-	float savedDrag;
-	float savedAnguarDrag;
+	Vector3 savedVelocityPause;
+	Vector3 savedAngVelocityPause;
 	float savedAnimatorSpeed;
 
 	private float jumpBoost = 1;
@@ -75,6 +75,7 @@ public class Character2D : MonoBehaviour{
 	//Use this for initialization
 	void Start(){
 		animator = GetComponentInChildren<Animator>();
+
 		//capsule = collider as CapsuleCollider;
 
 		/*
@@ -93,22 +94,41 @@ public class Character2D : MonoBehaviour{
 
 	}
 	
-	//dirty
-	public void Pause(){
-		savedDrag = rigidbody.drag;
-		savedAnguarDrag = rigidbody.angularDrag;
-		savedAnimatorSpeed = animator.speed;
+	public override void Pause(bool isPaused){
 
-		rigidbody.drag = 999;
-		rigidbody.angularDrag = 999;
-		animator.speed = 999;
+		base.Pause(isPaused);
 
+		if(isPaused){
+			savedVelocityPause = rigidbody.velocity;
+			savedAngVelocityPause = rigidbody.angularVelocity;
+
+			//rigidbody.velocity = Vector3.zero;
+			//rigidbody.angularVelocity = Vector3.zero;
+			rigidbody.isKinematic = true;
+
+			if(animator){
+				savedAnimatorSpeed = animator.speed;
+				animator.speed = 0;
+			}
+			else{
+				Debug.LogWarning("animator.avatar is null. animations will not be frozen on pause.");
+			}
+		}
+		else{
+
+			rigidbody.isKinematic = false;
+			rigidbody.AddForce( savedVelocityPause, ForceMode.VelocityChange );
+			rigidbody.AddTorque( savedAngVelocityPause, ForceMode.VelocityChange );
+
+			if(animator){
+				animator.speed = savedAnimatorSpeed;
+			}
+			else{
+				Debug.LogWarning("animator.avatar is null.");
+			}
+		}
 	}
-	public void Resume(){
-		rigidbody.drag = savedDrag;
-		rigidbody.angularDrag = savedAnguarDrag;
-		animator.speed = savedAnimatorSpeed;
-	}
+
 
 	public void Move(Vector3 lookPos, Vector3 move, bool jump){
 		if(move.magnitude > 1) move.Normalize();

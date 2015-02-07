@@ -11,30 +11,50 @@ public class MultiplayerController : MonoBehaviour {
 
 	public List<Character2DController> players;
 
+	void Awale () {
+
+	}
+
 	// Use this for initialization
 	void Start () {
-	
+		EventManager.OnGameStart += unpauseChars;
+		EventManager.OnGameEnd += pauseChars;
+		pauseChars();
+
 	}
 
 	// Update is called once per frame
 	void Update () {
 		//TESTING TODO: remove
 		if(Input.GetKeyDown(KeyCode.Space)){
-			//switchCharacters();
-			pauseCharacters();
+			EventManager.StartGame();
+			//pauseChars();
+			//switchCharacters(1);
+			//pauseCharacters();
 		}
+
 	}
 
-	public void pauseCharacters(){
+	public void unpauseChars(){
+		setPauseCharacters(false);
+	}
+	public void pauseChars(){
+		setPauseCharacters(true);
+	}
+
+	public void setPauseCharacters(bool val){
 		for(int i=0; i< players.Count; i++){
-			players[i].Pause(true); 
+			players[i].Pause(val); 
 		}
 	}
+	
 
-	public void switchCharacters(){
+	public void switchCharacters(float delaySeconds){
 		//TODO: changge to loop if we have more than 2 chars.
 
-		bool success = players[(int)PlayerNumber.One-1].switchToPlayer(PlayerNumber.Two, players[(int)PlayerNumber.Two-1]);
+		bool success = players[(int)PlayerNumber.One-1].switchToPlayer(PlayerNumber.Two, 
+		                                                               players[(int)PlayerNumber.Two-1],
+		                                                               delaySeconds);
 
 		if(success){
 			Character2DController tmp = players[(int)PlayerNumber.One-1];
