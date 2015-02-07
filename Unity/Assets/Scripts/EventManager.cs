@@ -13,7 +13,9 @@ public class EventManager : MonoBehaviour {
 
     public delegate void PlayerDeathAction(int playerID);
     public static event PlayerDeathAction OnPlayerDeath;
-    
+
+    public delegate void AudioStartAction(double syncTime);
+    public static event AudioStartAction OnMusic_NewClip;
 
     public static void StartGame() {
         OnGameStart();
@@ -25,6 +27,10 @@ public class EventManager : MonoBehaviour {
 
     public static void DifficultyChanged() {
         OnDifficultyChange();
+    }
+
+    public static void Music_NewClip(double syncTime) {
+        OnMusic_NewClip(syncTime);
     }
 
     public static void Music_Beat() {
