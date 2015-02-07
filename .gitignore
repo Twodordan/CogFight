@@ -15,3 +15,15 @@ Unity/Library/metadata/
 Unity/Library/ScriptAssemblies/CompilationCompleted.txt
 Unity/Library/guidmapper
 Unity/Temp/
+Unity/_UpgradeReport_Files/
+*.sln
+*.csproj
+Unity/UpgradeLog.XML
+Unity/UpgradeLog.htm
+Unity/Library/ShaderCache.db
+Unity/Library/guidmapper
+*.unityproj
+Unity/Library/
+Unity/Assembly-CSharp-firstpass-vs.csproj
+Unity/Assembly-CSharp-firstpass.csproj
+.gitignore.orig
