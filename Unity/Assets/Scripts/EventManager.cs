@@ -14,8 +14,8 @@ public class EventManager : MonoBehaviour {
     public delegate void PlayerDeathAction(int playerID);
     public static event PlayerDeathAction OnPlayerDeath;
 
-    public delegate void AudioStartAction(double syncTime);
-    public static event AudioStartAction OnMusic_NewClip;
+    public delegate void AudioStartAction(double syncTime, double clipLength);
+    public static event AudioStartAction OnMusic_StartNewClip;
 
     public static void StartGame() {
         OnGameStart();
@@ -29,8 +29,10 @@ public class EventManager : MonoBehaviour {
         OnDifficultyChange();
     }
 
-    public static void Music_NewClip(double syncTime) {
-        OnMusic_NewClip(syncTime);
+    public static void Music_NewClip(double syncTime, double clipLength) {
+        if (OnMusic_StartNewClip != null) {
+            OnMusic_StartNewClip(syncTime, clipLength);
+        }
     }
 
     public static void Music_Beat() {
