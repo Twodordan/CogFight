@@ -1,4 +1,11 @@
 Unity/Temp/UnityLockfile
+<<<<<<< HEAD
 Unity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll.mdb
 Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll.mdb
+=======
+Unity/Library/CurrentLayout.dwlt
+Unity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll.mdb
+Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll.mdb
+Unity/Library/assetDatabase3
+>>>>>>> master
 Unity/Library/expandedItems
