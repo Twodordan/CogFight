@@ -94,9 +94,11 @@ public class Character2D : IPausable{
 
 	}
 	
-	public override void Pause(bool isPaused){
+	public override void Pause(bool paused){
+		if(paused == isPaused)
+			return; 
 
-		base.Pause(isPaused);
+		base.Pause(paused);
 
 		if(isPaused){
 			savedVelocityPause = rigidbody.velocity;
