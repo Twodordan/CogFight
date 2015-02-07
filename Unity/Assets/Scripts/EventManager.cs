@@ -36,7 +36,9 @@ public class EventManager : MonoBehaviour {
     }
 
     public static void Music_Beat() {
-        OnMusic_Beat();
+        if (OnMusic_Beat != null) {
+            OnMusic_Beat();
+        }
     }
 
     public static void Music_Bar() {
