@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCharacter\MultiplayerController.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Utils\IPausable.cs" Line="11" Column="3" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DUserControl.cs" Line="14" Column="2" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2D.cs" Line="6" Column="2" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DController.cs" Line="106" Column="17" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DScriptControl.cs" Line="8" Column="12" />
+      <File FileName="Assets\Scripts\PlayerCharacter\MultiplayerController.cs" Line="18" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
