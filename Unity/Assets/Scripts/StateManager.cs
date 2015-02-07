@@ -10,10 +10,20 @@ public class StateManager : MonoBehaviour {
 
     void Awake() {
         singleton = this;
+        EventManager.OnGameStart += SetStateToPlaying;
+        EventManager.OnGameEnd += SetStateToEnded;
     }
 
     public static GameState State {
         get { return singleton.state; ; }
         set { singleton.state = value; Debug.Log("New game state: " + singleton.state); }
+    }
+
+    void SetStateToPlaying() {
+        State = GameState.Playing;
+    }
+
+    void SetStateToEnded() {
+        State = GameState.Ended;
     }
 }

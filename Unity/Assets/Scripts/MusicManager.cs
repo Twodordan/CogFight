@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour {
 
     List<AudioClip> musicTracks;
 
+
 	void Start () {
         StartCoroutine(CountdownToStartOfGame(countdownToStart));
 	}
@@ -23,7 +24,7 @@ public class MusicManager : MonoBehaviour {
     IEnumerator CountdownToStartOfGame(float time) {
         yield return new WaitForSeconds(time);
 
-        StateManager.State = GameState.Playing;
+        EventManager.StartGame();
 
         yield break;
     }
