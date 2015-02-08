@@ -8,7 +8,8 @@ public class Character2DScriptControl:MonoBehaviour{
 
 
 	public void rubberBanding(Transform myTransform, 
-							  Transform targetTransform
+							  Transform targetTransform,
+	                          Character2D characterHACK
 							  )
 	{
 		Vector3 vectToTarget = targetTransform.position - myTransform.position;

@@ -88,7 +88,7 @@ public class Character2DController : IPausable {
 
 		character.Move(lookPos, move, jump);
 
-		scriptControl.rubberBanding(transform, playerIsAttachedTo);
+		scriptControl.rubberBanding(transform, playerIsAttachedTo, character);
 
 
 	}
