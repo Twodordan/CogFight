@@ -8,12 +8,16 @@ public class StartMenuManager : MonoBehaviour {
 
     public float audioTimer = 1f;
 
+	public Texture backgroundTexture;
+
     void Awake() {
         audio.playOnAwake = false;
         audio.loop = false;
     }
 
     void OnGUI() {
+		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), backgroundTexture);
+
         if (GUI.Button(startGameButton, "THERE IS ONLY ONE BUTTON\nAND IT STARTS THE GAME")) {
             audio.Play();
             StartCoroutine(LoadLevelDelayed(audioTimer));
