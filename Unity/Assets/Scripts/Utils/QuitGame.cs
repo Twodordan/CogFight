@@ -10,7 +10,7 @@ public class QuitGame : MonoBehaviour {
     }
 
     void Start() {
-        if (singleton == null) {
+        if (singleton != this) {
             DontDestroyOnLoad(this.gameObject);
         } else {
             Destroy(this.gameObject);
