@@ -140,34 +140,36 @@ public class MusicManager_2 : MonoBehaviour {
     }
 
     void ChangeFastToEndingTracks() {
-        StopCoroutine(newClipWaitingRoutine);
+        if (StateManager.State == GameState.Playing) {
+            StopCoroutine(newClipWaitingRoutine);
 
-        double initTime = GetTimeOfNextBar();
-        MusicWithInformation newTrack = GetNextBaseTrack();
+            double initTime = GetTimeOfNextBar();
+            MusicWithInformation newTrack = GetNextBaseTrack();
 
-        foreach (AudioSource source in sources) {
-            source.SetScheduledEndTime(initTime);
+            foreach (AudioSource source in sources) {
+                source.SetScheduledEndTime(initTime);
+            }
+
+            AudioSource newSource = sources[0];
+            newSource.clip = newTrack.clip;
+            newSource.volume = newTrack.volume;
+            newSource.PlayScheduled(initTime);
+            newSource.SetScheduledStartTime(initTime);
+
+
+
+            newSource.SetScheduledEndTime(initTime + newSource.clip.length);
+            newTrack.initTime = initTime;
+
+            Debug.Log("New clip interrupt! Name: " + newTrack.name);
+
+            initOfNextClip = initTime;
+
+            beatNumber = 0;
+            currentlyPlayingTrack = newTrack;
+
+            EventManager.Music_NewClip(initTime, newTrack.clip.length);
         }
-
-        AudioSource newSource = sources[0];
-        newSource.clip = newTrack.clip;
-        newSource.volume = newTrack.volume;
-        newSource.PlayScheduled(initTime);
-        newSource.SetScheduledStartTime(initTime);
-
-        
-
-        newSource.SetScheduledEndTime(initTime + newSource.clip.length);
-        newTrack.initTime = initTime;
-
-        Debug.Log("New clip interrupt! Name: " + newTrack.name);
-
-        initOfNextClip = initTime;
-
-        beatNumber = 0;
-        currentlyPlayingTrack = newTrack;
-
-        EventManager.Music_NewClip(initTime, newTrack.clip.length);
     }
 
     public void StartForeshadowing(AudioCueType cueType) {
@@ -218,8 +220,10 @@ public class MusicManager_2 : MonoBehaviour {
     void Update() {
         TrimForeshadowSourceControllers();
 
-        if (Input.GetButtonDown("Back")) {
-            StateManager.State = GameState.Ended;
+        if (StateManager.State != GameState.Ended) {
+            if (Input.GetButtonDown("Back")) {
+                StateManager.State = GameState.Ended;
+            }
         }
     }
 
