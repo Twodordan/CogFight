@@ -112,7 +112,11 @@ public class MusicManager_2 : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.P)) {
             if (StateManager.State == GameState.Playing) {
-
+                AudioSource foreshadow = gameObject.AddComponent<AudioSource>();
+                SyncSourceSettings(audio, ref foreshadow);
+                foreshadow.clip = foreshadowTracks[0].clip;
+                double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
+                foreshadow.PlayScheduled(currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration);
             }
         }
     }
@@ -126,6 +130,7 @@ public class MusicManager_2 : MonoBehaviour {
                     EventManager.Music_Bar();
                 }
                 EventManager.Music_Beat((beatNumber - 1) % 4);
+                lastBeatTime = currentlyPlayingTrack.initTime + currentBeatDuration * beatNumber;
             }
         }
     }
@@ -136,7 +141,8 @@ public class MusicManager_2 : MonoBehaviour {
 
     double GetNextBeatTime() {
         double result = 0.0;
-
+        double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
+        result = lastBeatTime + currentBeatDuration;
         return result;
     }
 
