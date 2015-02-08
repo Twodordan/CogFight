@@ -24,8 +24,8 @@ public class MultiplayerController : MonoBehaviour {
 	private int beatsCountedSinceSwitch = 0;
 
 	void Awake () {
-		EventManager.OnGameStart += unpauseChars;
-		EventManager.OnGameEnd += pauseChars;
+		//EventManager.OnGameStart += unpauseChars;
+		//EventManager.OnGameEnd += pauseChars;
 		EventManager.OnMusic_Bar += switchCharactersByEvent;
 		EventManager.OnTerminateLevel += cleanUpBeforeTerminate;
 	}
@@ -41,7 +41,8 @@ public class MultiplayerController : MonoBehaviour {
 	void Update () {
 
 
-		//TESTING TODO: remove
+		//TESTING
+		/*
 		if(Input.GetButtonDown("Start")){
 			//bad
 			//EventManager.StartGame();
@@ -57,7 +58,7 @@ public class MultiplayerController : MonoBehaviour {
 
 
 			//Application.loa
-		}
+		}*/
 
 
 		/*

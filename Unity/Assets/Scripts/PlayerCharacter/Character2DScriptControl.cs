@@ -9,7 +9,7 @@ public class Character2DScriptControl:MonoBehaviour{
 
 	public void rubberBanding(Transform myTransform, 
 							  Transform targetTransform,
-	                          Character2D characterHACK
+	                          bool onGround
 							  )
 	{
 		Vector3 vectToTarget = targetTransform.position - myTransform.position;
@@ -38,8 +38,15 @@ public class Character2DScriptControl:MonoBehaviour{
 
 		vectToTarget.z = 0;
 
+		//TODO
+		float tempHack = 1;
+		if(!onGround){
+			tempHack = 3f;
+			//Debug.Log("Not On Goround ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
+		}
+
 		myTransform.rigidbody.AddForce(vectToTarget.normalized * dir *
-		                               fResult * springSettings.scaleSpringForce, 
+		                               fResult * springSettings.scaleSpringForce * tempHack, 
 		                               ForceMode.VelocityChange);
 	}
 }

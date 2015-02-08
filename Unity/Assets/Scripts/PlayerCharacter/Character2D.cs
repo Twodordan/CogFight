@@ -134,7 +134,7 @@ public class Character2D : IPausable{
 	}
 
 
-	public void Move(Vector3 lookPos, Vector3 move, bool jump){
+	public void Move(Vector3 lookPos, Vector3 move, bool jump, out bool onground){
 		if(move.magnitude > 1) move.Normalize();
 
 		//transfer input parameters to member variables.
@@ -178,6 +178,8 @@ public class Character2D : IPausable{
 		//UpdateAnimator ();//send input and other state parameters to the animator
 	
 		rigidbody.velocity = velocity;
+
+		onground = onGround;
 	}
 
 

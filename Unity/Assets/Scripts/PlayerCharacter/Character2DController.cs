@@ -43,7 +43,7 @@ public class Character2DController : IPausable {
 	private bool switchInProgress_ = false;
 
 	void Awake(){
-
+		EventManager.OnPlayerDeath += onAPlayersDeath;
 	}
 
 	void Start () {
@@ -85,22 +85,29 @@ public class Character2DController : IPausable {
 		                       out lookPos, out move, out jump);
 
 
+		bool onGround;
+		character.Move(lookPos, move, jump, out onGround);
 
-		character.Move(lookPos, move, jump);
-
-		scriptControl.rubberBanding(transform, playerIsAttachedTo, character);
+		scriptControl.rubberBanding(transform, playerIsAttachedTo, onGround);
 
 
 	}
 
+	void onAPlayersDeath(int i){
+		Pause(true);
+	}
+
 	void OnCollisionEnter(Collision collision) {
+
+		if(isPaused)
+			return;
 
 		foreach (ContactPoint contact in collision.contacts) {
 			//Debug.DrawRay(contact.point, contact.normal, Color.white);
 			if(contact.otherCollider.tag == "Obstacle"){
 				EventManager.PlayerDeath((int)playerNumber);
 				Debug.Log("playerNumber died: "+playerNumber);
-				Pause(true);
+
 				return;
 			}
 		}
