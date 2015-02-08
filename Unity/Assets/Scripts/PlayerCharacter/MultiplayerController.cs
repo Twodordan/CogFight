@@ -27,6 +27,7 @@ public class MultiplayerController : MonoBehaviour {
 		EventManager.OnGameStart += unpauseChars;
 		EventManager.OnGameEnd += pauseChars;
 		EventManager.OnMusic_Bar += switchCharactersByEvent;
+		EventManager.OnTerminateLevel += cleanUpBeforeTerminate;
 	}
 
 	// Use this for initialization
@@ -50,8 +51,9 @@ public class MultiplayerController : MonoBehaviour {
 		}
 		else if(Input.GetButtonDown("Back")){
 
-			StopAllCoroutines();
-			StartCoroutine(delayLoadLevel(5));
+			EventManager.TerminateLevel();
+			Debug.Log("_________________ TerminatingLevel");
+			StartCoroutine(delayLoadLevel(2));
 
 
 			//Application.loa
@@ -70,9 +72,14 @@ public class MultiplayerController : MonoBehaviour {
 
 	}
 
-	public IEnumerator delayLoadLevel(float secs){
+	private void cleanUpBeforeTerminate(){
+		StopAllCoroutines();
+	}
+
+	private IEnumerator delayLoadLevel(float secs){
 
 		yield return new WaitForSeconds(secs);
+		Debug.Log("_________________ delayload");
 		Application.LoadLevel(whichSceneToLoadOnReset);
 	}
 
