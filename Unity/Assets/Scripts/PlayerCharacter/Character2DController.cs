@@ -110,7 +110,9 @@ public class Character2DController : IPausable {
 				Debug.Log("playerNumber died: "+playerNumber);
 
 				//TODO: at least have an event here
-				StartCoroutine(delayRestartPlayers(1.5f));
+				if(StateManager.State != GameState.Ended){
+					StartCoroutine(delayRestartPlayers(1.5f));
+				}
 				return;
 			}
 		}
@@ -121,8 +123,13 @@ public class Character2DController : IPausable {
 	private IEnumerator delayRestartPlayers(float time){
 
 		yield return new WaitForSeconds(time);
-		multiControllerHACK.setPauseCharacters(false);
-		multiControllerHACK.resetCharactersPosition();
+
+		if(StateManager.State != GameState.Ended){
+			 //TODO: this is so horrible :/
+
+			multiControllerHACK.setPauseCharacters(false);
+			multiControllerHACK.resetCharactersPosition();
+		}
 	}
 
 
