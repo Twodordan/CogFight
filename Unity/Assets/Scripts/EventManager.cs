@@ -8,6 +8,7 @@ public class EventManager : MonoBehaviour {
     public static event BasicAction OnGameEnd;
     public static event BasicAction OnGamePause;
     public static event BasicAction OnDifficultyChange;
+    public static event BasicAction OnTerminateLevel;
 
     public delegate void IntegerAction(int n);
     public static event IntegerAction OnMusic_Beat;
@@ -38,6 +39,12 @@ public class EventManager : MonoBehaviour {
     public static void PauseGame() {
         if (OnGamePause != null) {
             OnGamePause();
+        }
+    }
+
+    public static void TerminateLevel() {
+        if (OnTerminateLevel != null) {
+            OnTerminateLevel();
         }
     }
 
