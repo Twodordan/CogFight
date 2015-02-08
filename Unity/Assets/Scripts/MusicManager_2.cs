@@ -17,10 +17,14 @@ public class MusicManager_2 : MonoBehaviour {
 
     MusicWithInformation currentlyPlayingTrack;
     List<MusicWithInformation> currentTrackQueue = new List<MusicWithInformation>();
+    
     List<AudioSource> sources = new List<AudioSource>();
+    List<AudioSourceController> foreshadowSources = new List<AudioSourceController>();
 
     int beatNumber = 0;
     double lastBeatTime = 0;
+
+    int barNumber = 0;
 
     IEnumerator Start() {
         yield return new WaitForSeconds(musicDelay);
@@ -36,16 +40,9 @@ public class MusicManager_2 : MonoBehaviour {
         }
 
         EventManager.OnMusic_StartNewClip += (double syncTime, double clipLength) => { StartCoroutine(OnNewClip(syncTime, clipLength)); };
-        EventManager.OnMusic_Beat += () => { beatNumber++; };
-
         
         double initTime = AudioSettings.dspTime;
-        //sources[0].clip = beginTrack.clip;
-        //sources[0].PlayScheduled(initTime);
-        //beginTrack.initTime = initTime;
-        //currentlyPlayingTrack = beginTrack;
-
-        EventManager.Music_NewClip(initTime, 0); // Declare that we are starting the beginTrack
+        EventManager.Music_NewClip(initTime, 0); // Declare that we are starting queuing
 
         yield break;
     }
@@ -108,7 +105,16 @@ public class MusicManager_2 : MonoBehaviour {
                 break;
         }
         
-        return result;
+        return result.Copy();
+    }
+
+    // DEBUG
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.P)) {
+            if (StateManager.State == GameState.Playing) {
+
+            }
+        }
     }
 
     void FixedUpdate() {
@@ -116,16 +122,22 @@ public class MusicManager_2 : MonoBehaviour {
             double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
             if (AudioSettings.dspTime - 0.05 > currentlyPlayingTrack.initTime + currentBeatDuration * beatNumber) {
                 beatNumber++;
-                if (beatNumber % 4 == 0) {
+                if (beatNumber % 4 == 1) {
                     EventManager.Music_Bar();
                 }
-                EventManager.Music_Beat();
+                EventManager.Music_Beat((beatNumber - 1) % 4);
             }
         }
     }
 
     void OnGUI() {
         GUI.Label(new Rect(0, 0, 100, 100), ((beatNumber - 1) / 4 + 1).ToString());
+    }
+
+    double GetNextBeatTime() {
+        double result = 0.0;
+
+        return result;
     }
 
     void QueuedEventSetStatePlaying(double time, double clipLength) {
@@ -163,4 +175,25 @@ public class MusicWithInformation {
     public float chanceWeight = 1f;
 
     public double initTime;
+
+    public MusicWithInformation Copy() {
+        MusicWithInformation result = new MusicWithInformation();
+        result.name = name;
+        result.clip = clip;
+        result.BPM = BPM;
+        result.chanceWeight = chanceWeight;
+
+        return result;
+    }
+}
+
+public class AudioSourceController {
+    public AudioSource source;
+    public double initTime;
+
+    public AudioSourceController(double initTime, AudioClip clip, AudioSource copySettings) {
+        MusicManager_2.SyncSourceSettings(copySettings, ref source);
+        source.clip = clip;
+        this.initTime = initTime;
+    }
 }
