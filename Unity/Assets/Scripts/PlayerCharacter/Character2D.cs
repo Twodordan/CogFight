@@ -91,7 +91,7 @@ public class Character2D : IPausable{
 		*/
 		rayHitComparer = new RayHitComparer ();
 		
-		SetUpAnimator();
+		//SetUpAnimator();
 
 
 	}
