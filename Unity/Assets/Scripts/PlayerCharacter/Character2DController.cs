@@ -97,8 +97,9 @@ public class Character2DController : IPausable {
 
 		foreach (ContactPoint contact in collision.contacts) {
 			//Debug.DrawRay(contact.point, contact.normal, Color.white);
-			if(contact.otherCollider.tag == "obstacle"){
+			if(contact.otherCollider.tag == "Obstacle"){
 				EventManager.PlayerDeath((int)playerNumber);
+				Debug.Log("playerNumber died: "+playerNumber);
 				Pause(true);
 				return;
 			}
