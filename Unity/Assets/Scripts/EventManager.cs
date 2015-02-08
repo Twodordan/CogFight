@@ -57,14 +57,18 @@ public class EventManager : MonoBehaviour {
     }
 
     public static void Music_Beat(int n) {
-        if (OnMusic_Beat != null) {
-            OnMusic_Beat(n);
+        if (StateManager.State == GameState.Playing) {
+            if (OnMusic_Beat != null) {
+                OnMusic_Beat(n);
+            }
         }
     }
 
     public static void Music_Bar() {
-        if (OnMusic_Bar != null) {
-            OnMusic_Bar();
+        if (StateManager.State == GameState.Playing) {
+            if (OnMusic_Bar != null) {
+                OnMusic_Bar();
+            }
         }
     }
 

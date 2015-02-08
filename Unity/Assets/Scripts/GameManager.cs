@@ -11,8 +11,14 @@ public class GameManager : MonoBehaviour {
     IEnumerator Start() {
         EventManager.OnGameStart += SetStartTime;
 
-        StateManager.Flags = StateFlags.ReadyForPlay;
+        //StateManager.Flags = StateFlags.ReadyForPlay;
         yield break;
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            StateManager.Flags = StateFlags.ReadyForPlay;
+        }
     }
 
     void FixedUpdate() {
