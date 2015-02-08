@@ -50,7 +50,10 @@ public class MultiplayerController : MonoBehaviour {
 		}
 		else if(Input.GetButtonDown("Back")){
 
-			Application.LoadLevel(whichSceneToLoadOnReset);
+			StopAllCoroutines();
+			StartCoroutine(delayLoadLevel(5));
+
+
 			//Application.loa
 		}
 
@@ -65,6 +68,12 @@ public class MultiplayerController : MonoBehaviour {
 		}
 		*/
 
+	}
+
+	public IEnumerator delayLoadLevel(float secs){
+
+		yield return new WaitForSeconds(secs);
+		Application.LoadLevel(whichSceneToLoadOnReset);
 	}
 
 	public void unpauseChars(){
