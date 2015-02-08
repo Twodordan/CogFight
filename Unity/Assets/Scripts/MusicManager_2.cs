@@ -63,8 +63,8 @@ public class MusicManager_2 : MonoBehaviour {
             newSource.clip = newTrack.clip;
             newSource.volume = newTrack.volume;
             newSource.PlayScheduled(initTime);
-            //newSource.SetScheduledStartTime(initTime);
-            newSource.SetScheduledEndTime(initTime + newSource.clip.samples);
+            newSource.SetScheduledStartTime(initTime);
+            newSource.SetScheduledEndTime(initTime + newSource.clip.length);
             newTrack.initTime = initTime;
 
             Debug.Log("New clip queued! Name: " + newTrack.name);
@@ -220,6 +220,10 @@ public class MusicManager_2 : MonoBehaviour {
     public static void CycleList<T>(ref List<T> list) {
         list.Add(list[0]);
         list.RemoveAt(0);
+    }
+
+    void OnDestroy() {
+        StopAllCoroutines();
     }
 
     public static void SyncSourceSettings(AudioSource original, ref AudioSource next) {
