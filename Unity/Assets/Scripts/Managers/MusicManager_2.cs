@@ -161,10 +161,10 @@ public class MusicManager_2 : MonoBehaviour {
             
 
             if (cueType == AudioCueType.Foreshadow_Long) {
-                StartCoroutine(CallForeshadowBegin(currentBeatDuration * 8, id, foreshadow.clip.length));
+                StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, currentBeatDuration * 8));
                 StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
             } else if (cueType == AudioCueType.Foreshadow_Short) {
-                StartCoroutine(CallForeshadowBegin(currentBeatDuration * 4, id, foreshadow.clip.length));
+                StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, currentBeatDuration * 4));
                 StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id, foreshadow.clip.length));
             } else if (controller.cueType == AudioCueType.UNDEFINED) {
                 Debug.LogWarning("Tried to activate a foreshadow countdown but the clip had the UNDEFINED cue type");
