@@ -44,8 +44,7 @@ public class ObstacleTrigger : MonoBehaviour {
 		EventManager.OnMusic_ForeshadowBegin += ForeshadowBegin;
 		EventManager.OnMusic_ForeshadowConclusion += ForeshadowConclusion;
 	}
-	
-	
+
 	void ForeshadowBegin (int id, double duration){
 		GameObject chosenGameobject = tileArray[Random.Range(0,tileArray.Length-1)];
 
