@@ -5,14 +5,17 @@ using System.Collections.Generic;
 public class ObstacleTrigger : MonoBehaviour {
 
 	private GameObject[] tileArray;
-	public Spike spike;
+	//public Spike spike;
+
+    public GameObject spikePrefab;
+
 	public Material tileMaterial;
 	public Material warningMaterial;
 
     public float spikeStabDuration = 0.4f;
     public float spikeRetractDuration = 1.7f;
     public float spikeDistance = 12f;
-    public float spikeStealthedY;
+    private float spikeStealthedY = -7.91f;
     public AnimationCurve spikeMovementCurve = new AnimationCurve();
     Coroutine spikeCoroutine = null;
 
@@ -32,7 +35,7 @@ public class ObstacleTrigger : MonoBehaviour {
 			Debug.Log("No game objects are tagged with Tile");
 		}
 
-        spikeStealthedY = spike.transform.position.y;
+        //spikeStealthedY = spike.transform.position.y;
 	}
 
 	void Awake (){
@@ -87,8 +90,8 @@ public class ObstacleTrigger : MonoBehaviour {
 	}
 
     IEnumerator AnimateSpike(float x) {
-
-        spike.transform.position = new Vector3(x, spikeStealthedY);
+        GameObject spike = (GameObject)Instantiate(spikePrefab, new Vector3(x, spikeStealthedY), Quaternion.identity);
+        //spike.transform.position = new Vector3(x, spikeStealthedY);
 
         Vector3 startPosition = spike.transform.position;
         Vector3 topPosition = startPosition + Vector3.up * spikeDistance;
@@ -108,6 +111,8 @@ public class ObstacleTrigger : MonoBehaviour {
         }
 
         spike.transform.position = startPosition;
+
+        Destroy(spike);
 
         spikeCoroutine = null;
         yield break;
