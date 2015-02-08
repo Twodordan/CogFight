@@ -8,31 +8,79 @@ public enum PlayerNumber{
 }
 
 public class MultiplayerController : MonoBehaviour {
+	[Space(10)]
+	[Header("1 bar =  4x beats")]
+	[Range(1,8)]
+	public int switchPlayersEveryXBar = 1;
+	[Space(10)]
 
-	public List<Character2DController> players;
+	[SerializeField]
+	[Range(0,2)]
+	private int whichSceneToLoadOnReset = 0;
 
-	void Awale () {
+	[SerializeField]
+	private List<Character2DController> players;
 
+	private int beatsCountedSinceSwitch = 0;
+
+	void Awake () {
+		EventManager.OnGameStart += unpauseChars;
+		EventManager.OnGameEnd += pauseChars;
+		EventManager.OnMusic_Bar += switchCharactersByEvent;
+		EventManager.OnTerminateLevel += cleanUpBeforeTerminate;
 	}
 
 	// Use this for initialization
 	void Start () {
-		EventManager.OnGameStart += unpauseChars;
-		EventManager.OnGameEnd += pauseChars;
+
 		pauseChars();
 
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+
 		//TESTING TODO: remove
+		if(Input.GetButtonDown("Start")){
+			//bad
+			//EventManager.StartGame();
+			//StateManager.State = GameState.Playing;
+
+			StateManager.Flags = StateFlags.ReadyForPlay;
+		}
+		else if(Input.GetButtonDown("Back")){
+
+			EventManager.TerminateLevel();
+			Debug.Log("_________________ TerminatingLevel");
+			StartCoroutine(delayLoadLevel(0));
+
+
+			//Application.loa
+		}
+
+
+		/*
 		if(Input.GetKeyDown(KeyCode.Space)){
-			EventManager.StartGame();
+			//StateManager.State = GameState.Playing;
+			StateManager.Flags = StateFlags.ReadyForPlay;
 			//pauseChars();
 			//switchCharacters(1);
 			//pauseCharacters();
 		}
+		*/
 
+	}
+
+	private void cleanUpBeforeTerminate(){
+		StopAllCoroutines();
+	}
+
+	private IEnumerator delayLoadLevel(float secs){
+
+		yield return new WaitForSeconds(secs);
+		Debug.Log("_________________ delayload");
+		Application.LoadLevel(whichSceneToLoadOnReset);
 	}
 
 	public void unpauseChars(){
@@ -47,10 +95,21 @@ public class MultiplayerController : MonoBehaviour {
 			players[i].Pause(val); 
 		}
 	}
-	
+
+	public void switchCharactersByEvent(){
+
+		beatsCountedSinceSwitch++;
+
+		if(beatsCountedSinceSwitch >= switchPlayersEveryXBar){
+
+			beatsCountedSinceSwitch = 0;
+			switchCharacters(0);
+		}
+
+	}
 
 	public void switchCharacters(float delaySeconds){
-		//TODO: changge to loop if we have more than 2 chars.
+		//Note: changge to loop if we have more than 2 chars.
 
 		bool success = players[(int)PlayerNumber.One-1].switchToPlayer(PlayerNumber.Two, 
 		                                                               players[(int)PlayerNumber.Two-1],

@@ -8,6 +8,7 @@ public class EventManager : MonoBehaviour {
     public static event BasicAction OnGameEnd;
     public static event BasicAction OnGamePause;
     public static event BasicAction OnDifficultyChange;
+    public static event BasicAction OnTerminateLevel;
 
     public delegate void IntegerAction(int n);
     public static event IntegerAction OnMusic_Beat;
@@ -22,6 +23,24 @@ public class EventManager : MonoBehaviour {
 
     public delegate void AudioStartAction(double syncTime, double clipLength);
     public static event AudioStartAction OnMusic_StartNewClip;
+
+    void OnDestroy() {
+        OnGameStart = null;
+        OnGameEnd = null;
+        OnGamePause = null;
+
+        OnDifficultyChange = null;
+        OnTerminateLevel = null;
+
+        OnMusic_Beat = null;
+        OnMusic_Bar = null;
+
+        OnMusic_ForeshadowBegin = null;
+        OnMusic_ForeshadowConclusion = null;
+
+        OnPlayerDeath = null;
+        OnMusic_StartNewClip = null;
+    }
 
     public static void StartGame() {
         if (OnGameStart != null) {
@@ -38,6 +57,12 @@ public class EventManager : MonoBehaviour {
     public static void PauseGame() {
         if (OnGamePause != null) {
             OnGamePause();
+        }
+    }
+
+    public static void TerminateLevel() {
+        if (OnTerminateLevel != null) {
+            OnTerminateLevel();
         }
     }
 

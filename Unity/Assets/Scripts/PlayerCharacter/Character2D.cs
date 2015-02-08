@@ -96,7 +96,7 @@ public class Character2D : IPausable{
 	
 	public override void Pause(bool paused){
 		if(paused == isPaused)
-			return; 
+			return;
 
 		base.Pause(paused);
 

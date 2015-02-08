@@ -46,6 +46,7 @@ public class MusicManager_2 : MonoBehaviour {
         }
 
         EventManager.OnMusic_StartNewClip += (double syncTime, double clipLength) => { StartCoroutine(OnNewClip(syncTime, clipLength)); };
+        EventManager.OnTerminateLevel += OnTerminateLevel;
 
         double initTime = AudioSettings.dspTime;
         EventManager.Music_NewClip(initTime, 0); // Declare that we are starting queuing
@@ -145,7 +146,9 @@ public class MusicManager_2 : MonoBehaviour {
 
                 int id = foreshadowID++;
 
-                EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
+                //EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
+
+                StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, foreshadow.clip.length));
 
                 if (controller.cueType == AudioCueType.Foreshadow_Long) {
                     StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
@@ -158,6 +161,12 @@ public class MusicManager_2 : MonoBehaviour {
         }
 
         TrimForeshadowSourceControllers();
+    }
+
+    IEnumerator CallForeshadowBegin(double countdown, int id, double durationOfClip) {
+        yield return new WaitForSeconds((float)countdown);
+        EventManager.Music_ForeshadowBegin(id, durationOfClip);
+        yield break;
     }
 
     IEnumerator CallForeshadowEvent(double countdown, int id, double durationOfClip) {
@@ -224,8 +233,9 @@ public class MusicManager_2 : MonoBehaviour {
         list.RemoveAt(0);
     }
 
-    void OnDisable() {
+    void OnTerminateLevel() {
         StopAllCoroutines();
+        Destroy(this);
     }
 
     public static void SyncSourceSettings(AudioSource original, ref AudioSource next) {
