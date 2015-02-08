@@ -83,7 +83,7 @@ public class MusicManager_2 : MonoBehaviour {
     }
 
     double GetTimeUntilNextClip() {
-        return initOfNextClip - AudioSettings.dspTime;
+        return initOfNextClip - AudioSettings.dspTime - Time.fixedDeltaTime;
     }
 
     MusicWithInformation GetNextBaseTrack() {
