@@ -8,8 +8,14 @@ public enum PlayerNumber{
 }
 
 public class MultiplayerController : MonoBehaviour {
-
+	[Space(10)]
+	[Header("1 bar =  4x beats")]
+	[Range(1,8)]
+	public int switchPlayersEveryXBar = 1;
+	[Space(10)]
 	public List<Character2DController> players;
+
+	private int beatsCountedSinceSwitch = 0;
 
 	void Awake () {
 		EventManager.OnGameStart += unpauseChars;
@@ -58,7 +64,15 @@ public class MultiplayerController : MonoBehaviour {
 	}
 
 	public void switchCharactersByEvent(){
-		switchCharacters(0);
+
+		beatsCountedSinceSwitch++;
+
+		if(switchPlayersEveryXBar >= switchPlayersEveryXBar){
+
+			beatsCountedSinceSwitch = 0;
+			switchCharacters(0);
+		}
+
 	}
 
 	public void switchCharacters(float delaySeconds){
