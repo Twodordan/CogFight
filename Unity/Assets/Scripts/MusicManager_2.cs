@@ -46,6 +46,7 @@ public class MusicManager_2 : MonoBehaviour {
         }
 
         EventManager.OnMusic_StartNewClip += (double syncTime, double clipLength) => { StartCoroutine(OnNewClip(syncTime, clipLength)); };
+        EventManager.OnTerminateLevel += OnTerminateLevel;
 
         double initTime = AudioSettings.dspTime;
         EventManager.Music_NewClip(initTime, 0); // Declare that we are starting queuing
@@ -232,7 +233,7 @@ public class MusicManager_2 : MonoBehaviour {
         list.RemoveAt(0);
     }
 
-    void OnDisable() {
+    void OnTerminateLevel() {
         StopAllCoroutines();
     }
 
