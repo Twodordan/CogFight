@@ -31,6 +31,8 @@ public class Character2D : IPausable{
 	[System.Serializable]
 	public class AdvancedSettings
 	{
+		public int reverseRaycastDirMeshFix = -1;
+		public float groundedRayDistance = 1;
 		public float stationaryTurnSpeed = 180;				//additional turn speed added when the player is stationary (added to animation root rotation)
 		public float movingTurnSpeed = 360;					//additional turn speed added when the player is moving (added to animation root rotation)
 		public float headLookResponseSpeed = 2;				//speed at which head look follows its target
@@ -146,7 +148,7 @@ public class Character2D : IPausable{
 			falling = true;
 			canJumpContinuous = false;
 		}
-
+		//Debug.Log("canJumpContinuous: "+canJumpContinuous+"; jump: "+jump);
 
 
 		this.currentLookPos = lookPos;
@@ -220,27 +222,34 @@ public class Character2D : IPausable{
 	
 	void GroundCheck()
 	{
-		Ray ray = new Ray (transform.position + Vector3.up * .1f, -Vector3.up);
-		RaycastHit[] hits = Physics.RaycastAll (ray, .5f);
+		Ray ray = new Ray (transform.position + Vector3.up * .1f * advancedSettings.reverseRaycastDirMeshFix, 
+		                   -Vector3.up );
+		//Debug.DrawRay(transform.position + Vector3.up * advancedSettings.reverseRaycastDirMeshFix
+		//              , -Vector3.up );
+		RaycastHit[] hits = Physics.RaycastAll (ray, advancedSettings.groundedRayDistance);//.5f
 		System.Array.Sort (hits, rayHitComparer);
-		
+
 		if(velocity.y < jumpPower * .5f){
 			onGround = false;
 			rigidbody.useGravity = true;
+
 			foreach (var hit in hits){
+
 				//check whether we hit a non-trigger collider (and not the character itself)
 				if(!hit.collider.isTrigger){
+
 					//this counts as being on ground.
-					
+					/*
 					//stick to surface - helps character stick to ground - specially when running down slopes
 					if(velocity.y <= 0){
 						rigidbody.position = Vector3.MoveTowards (rigidbody.position, hit.point, Time.deltaTime * advancedSettings.groundStickyEffect);
 					}
-					
+					*/
 					onGround = true;
 					rigidbody.useGravity = false;
 					falling = false;
 					canJumpContinuous = true;
+
 					//terminalAirVelocity = terminalAirControlVelocity = Vector3.zero;
 					terminalAirVelocity = Vector3.zero;
 					jumpBoost = 1;

@@ -115,10 +115,11 @@ public class Character2DController : IPausable {
 		PlayerNumber number = (PlayerNumber)parms[0];
 		Character2DController other = (Character2DController)parms[1];
 		float delaySeconds = (float)parms[2];
-
+		/*
 		Debug.Log("SWITCH in progress; number: "+number+"; != playerNumber: "+
 		          playerNumber+"; delaySeconds: "+delaySeconds+
 		          ";");
+		          */
 		yield return new WaitForSeconds(delaySeconds);
 
 		//swap mesh 
@@ -138,7 +139,7 @@ public class Character2DController : IPausable {
 		characterMesh.transform.localRotation = Quaternion.identity;
 
 		switchInProgress_ = false;
-		Debug.Log("SWITCH Complete (can switch again)");
+		//Debug.Log("SWITCH Complete (can switch again)");
 	}
 
 }
