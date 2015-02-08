@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class StartMenuManager : MonoBehaviour {
 
-    Rect startGameButton = new Rect(Screen.width / 5f, Screen.height / 5f, Screen.width - 2 * Screen.width / 5f, Screen.height - 2 * Screen.height / 5f);
+    Rect startGameButton = new Rect(Screen.width / 3f, Screen.height / 3f, Screen.width - 2 * Screen.width / 3f, Screen.height - 2 * Screen.height / 3f);
 
     public float audioTimer = 1f;
 
