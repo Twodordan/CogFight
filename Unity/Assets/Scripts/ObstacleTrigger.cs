@@ -43,9 +43,9 @@ public class ObstacleTrigger : MonoBehaviour {
 	void Awake (){
 		EventManager.OnMusic_ForeshadowBegin += ForeshadowBegin;
 		EventManager.OnMusic_ForeshadowConclusion += ForeshadowConclusion;
+        EventManager.OnPlayerDeath += (int id) => { StartCoroutine(PlayerDeathTimer(id)); };
 	}
-	
-	
+
 	void ForeshadowBegin (int id, double duration){
 		GameObject chosenGameobject = tileArray[Random.Range(0,tileArray.Length-1)];
 
@@ -57,23 +57,43 @@ public class ObstacleTrigger : MonoBehaviour {
 		objectIDPairs.Add (new GameObjectIDPair(chosenGameobject, id));
 	}
 
+    bool playerDeath = false;
+
+    IEnumerator PlayerDeathTimer(int id) {
+        objectIDPairs.Clear();
+        playerDeath = true;
+        yield return new WaitForSeconds(1.5f);
+        playerDeath = false;
+        yield break;
+    }
+
 	IEnumerator AnimateColor(float duration, GameObject objectToColor) {
 		float startTime = Time.time;
         activeTiles.Add(objectToColor);
         Color colorAtBeginning = objectToColor.renderer.material.color;
 
 		// Color more
-		while(Time.time < startTime + duration) {
+		while(Time.time < startTime + duration && !playerDeath) {
 			float degree = (Time.time - startTime) / duration;
             objectToColor.renderer.material.color = Color.Lerp(colorAtBeginning, warningMaterial.color, degree);
+
+            if (playerDeath) {
+                break;
+            }
+
 			yield return null;
 		}
 
 		// Color less
 		startTime = Time.time;
-		while(Time.time < startTime + 1.5f) {
+		while(Time.time < startTime + 1.5f && !playerDeath) {
 			float degree = (Time.time - startTime) / 1.5f;
             objectToColor.renderer.material.color = Color.Lerp(warningMaterial.color, colorAtBeginning, degree);
+
+            if (playerDeath) {
+                break;
+            }
+
 			yield return null;
 		}
 
@@ -83,18 +103,20 @@ public class ObstacleTrigger : MonoBehaviour {
 	}
 
 	void ForeshadowConclusion (int id, double duration){
-		GameObject intendedGameObject = null;
-		foreach (GameObjectIDPair objIDPair in objectIDPairs) {
-			if (objIDPair.id == id) {
-				intendedGameObject = objIDPair.obj;
-				break;
-			}
-		}
+        if (!playerDeath) {
+            GameObject intendedGameObject = null;
+            foreach (GameObjectIDPair objIDPair in objectIDPairs) {
+                if (objIDPair.id == id) {
+                    intendedGameObject = objIDPair.obj;
+                    break;
+                }
+            }
 
-		if (intendedGameObject != null && spikeCoroutine == null) {
-			//spike.ActivateStab(intendedGameObject.transform.position.x);
-            spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
-		}
+            if (intendedGameObject != null) {
+                //spike.ActivateStab(intendedGameObject.transform.position.x);
+                spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
+            }
+        }
 	}
 
     IEnumerator AnimateSpike(float x) {
