@@ -42,6 +42,9 @@ public class Character2DController : IPausable {
 	 
 	private bool switchInProgress_ = false;
 
+	void Awake(){
+
+	}
 
 	void Start () {
 		userControl = new Character2DUserControl();
@@ -56,6 +59,8 @@ public class Character2DController : IPausable {
 	void Update () {
 
 	}
+
+
 
 	public override void Pause(bool pause){
 
@@ -88,6 +93,21 @@ public class Character2DController : IPausable {
 
 	}
 
+	void OnCollisionEnter(Collision collision) {
+
+		foreach (ContactPoint contact in collision.contacts) {
+			//Debug.DrawRay(contact.point, contact.normal, Color.white);
+			if(contact.otherCollider.tag == "Obstacle"){
+				EventManager.PlayerDeath((int)playerNumber);
+				Debug.Log("playerNumber died: "+playerNumber);
+				Pause(true);
+				return;
+			}
+		}
+	
+		
+	}
+	
 	public bool switchToPlayer(PlayerNumber number, Character2DController other, float delaySeconds){
 
 		if(number != playerNumber && !(switchInProgress || other.switchInProgress) && !isPaused){
@@ -140,6 +160,10 @@ public class Character2DController : IPausable {
 
 		switchInProgress_ = false;
 		//Debug.Log("SWITCH Complete (can switch again)");
+	}
+
+	private void getPlayerNumber(){
+
 	}
 
 }
