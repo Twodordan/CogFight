@@ -139,15 +139,18 @@ public class MusicManager_2 : MonoBehaviour {
                 double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
                 double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
                 foreshadow.PlayScheduled(initTime);
+                foreshadow.SetScheduledStartTime(initTime);
                 AudioSourceController controller = new AudioSourceController(initTime, foreshadow, foreshadowTracksLong[0].cueType);
                 foreshadowSourceControllers.Add(controller);
 
                 int id = foreshadowID++;
 
+                EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
+
                 if (controller.cueType == AudioCueType.Foreshadow_Long) {
-                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id));
+                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
                 } else if (controller.cueType == AudioCueType.Foreshadow_Short) {
-                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id));
+                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id, foreshadow.clip.length));
                 } else if (controller.cueType == AudioCueType.UNDEFINED) {
                     Debug.LogWarning("Tried to activate a foreshadow countdown but the clip had the UNDEFINED cue type");
                 }
@@ -157,10 +160,9 @@ public class MusicManager_2 : MonoBehaviour {
         TrimForeshadowSourceControllers();
     }
 
-    IEnumerator CallForeshadowEvent(double countdown, int id) {
-        Debug.Log("Started countdown");
+    IEnumerator CallForeshadowEvent(double countdown, int id, double durationOfClip) {
         yield return new WaitForSeconds((float)countdown);
-        EventManager.Music_ForeshadowConclusion(id);
+        EventManager.Music_ForeshadowConclusion(id, durationOfClip);
         yield break;
     }
 
