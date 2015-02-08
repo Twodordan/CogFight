@@ -74,7 +74,7 @@ public class ScoreManager : MonoBehaviour {
     }
 
     IEnumerator SwitchAnimation() {
-        Debug.Log("SWITCH");
+        //Debug.Log("SWITCH");
 
         float startTime = Time.time;
 
