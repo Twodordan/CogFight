@@ -5,7 +5,6 @@ using System.Collections;
 public class StartMenuManager : MonoBehaviour {
 
     Rect startGameButton = new Rect(Screen.width / 5f, Screen.height / 5f, Screen.width - 2 * Screen.width / 5f, Screen.height - 2 * Screen.height / 5f);
-    public int gameSceneNumber = 1;
 
     public float audioTimer = 1f;
 
@@ -23,7 +22,7 @@ public class StartMenuManager : MonoBehaviour {
 
     IEnumerator LoadLevelDelayed(float delay) {
         yield return new WaitForSeconds(delay);
-        Application.LoadLevel(gameSceneNumber);
+        Application.LoadLevel("MainGame");
     }
 
     void OnDestroy() {

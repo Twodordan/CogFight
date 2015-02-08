@@ -56,7 +56,7 @@ public class MusicManager_2 : MonoBehaviour {
 
     IEnumerator OnNewClip(double syncTime, double clipLength) {
         double initTime = syncTime + clipLength;
-
+        yield return new WaitForSeconds((float)(initTime - AudioSettings.dspTime - Time.fixedDeltaTime * 1.5f));
         MusicWithInformation newTrack = GetNextBaseTrack();
         if (newTrack != null) {
 
@@ -73,7 +73,6 @@ public class MusicManager_2 : MonoBehaviour {
             CycleList(ref sources);
 
             initOfNextClip = initTime;
-            yield return new WaitForSeconds((float)(initTime - AudioSettings.dspTime));
 
             beatNumber = 0;
             currentlyPlayingTrack = newTrack;
@@ -81,7 +80,8 @@ public class MusicManager_2 : MonoBehaviour {
 
             yield break;
         } else {
-            Debug.Log("Dunno lol");
+            Debug.Log("Returned null track");
+            Application.LoadLevel("StartMenu");
         }
     }
 
@@ -115,13 +115,16 @@ public class MusicManager_2 : MonoBehaviour {
 
             case GameState.Ended:
                 if (endTrackIndex > endTracks.Count - 1) {
-                    EventManager.OnMusic_StartNewClip += QueuedEventQuit;
                     result = null;
                 } else {
                     result = endTracks[endTrackIndex];
                     endTrackIndex++;
                 }
                 break;
+        }
+
+        if (result == null) {
+            return null;
         }
 
         return result.Copy();
@@ -174,19 +177,11 @@ public class MusicManager_2 : MonoBehaviour {
 
     // DEBUG
     void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            if (StateManager.State == GameState.Playing) {
-                StartForeshadowing(AudioCueType.Foreshadow_Long);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.O)) {
-            if (StateManager.State == GameState.Playing) {
-                StartForeshadowing(AudioCueType.Foreshadow_Short);
-            }
-        }
-
         TrimForeshadowSourceControllers();
+
+        if (Input.GetKeyDown(KeyCode.P)) {
+            StateManager.State = GameState.Ended;
+        }
     }
 
     IEnumerator CallForeshadowBegin(double countdown, int id, double durationOfClip) {
@@ -249,11 +244,6 @@ public class MusicManager_2 : MonoBehaviour {
             StateManager.State = GameState.Playing;
             EventManager.OnMusic_StartNewClip -= QueuedEventSetStatePlaying;
         }
-    }
-
-    void QueuedEventQuit(double time, double clipLength) {
-        Debug.Log("QUIT TO MAIN MENU");
-        EventManager.OnMusic_StartNewClip -= QueuedEventQuit;
     }
 
     public static void CycleList<T>(ref List<T> list) {

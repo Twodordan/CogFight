@@ -3,8 +3,18 @@ using System.Collections;
 
 public class QuitGame : MonoBehaviour {
 
+    static QuitGame singleton;
+
+    void Awake() {
+        singleton = this;
+    }
+
     void Start() {
-        DontDestroyOnLoad(this.gameObject);
+        if (singleton == null) {
+            DontDestroyOnLoad(this.gameObject);
+        } else {
+            Destroy(this.gameObject);
+        }
     }
 
     void Update() {
