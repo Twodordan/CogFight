@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Spike : MonoBehaviour {
 	
-	private float stabDistance = 6; //How long does the Spike travel?
-	private float stabSpeedUp = 20; //Speed going up
-	private float stabSpeedDown = 5; //Speed going down
+	private float stabDistance = 12; //How long does the Spike travel?
+	private float stabSpeedUp = 30; //Speed going up
+	private float stabSpeedDown = 7; //Speed going down
 	private bool stabbed = false;
 	private float distanceTravelled = 0;
 	private float stealthedY; //Stealthed position, for resetting the y position.

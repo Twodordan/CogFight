@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ObstacleTrigger : MonoBehaviour {
 
@@ -13,6 +14,7 @@ public class ObstacleTrigger : MonoBehaviour {
 	private float rate;
 	private int animation = 0;
 
+	private List<GameObjectIDPair> objectIDPairs = new List<GameObjectIDPair>();
 
 	void Start() {
 		//Find all the tiles tagged with tiles (the ones beneath the players)
@@ -23,46 +25,62 @@ public class ObstacleTrigger : MonoBehaviour {
 		}
 	}
 
-	void Update(){
-
-		if (animation == 1){
-			i += Time.deltaTime*rate*2;
-			tileArray[activeTile].renderer.material.color = Color.Lerp(tileMaterial.color, warningMaterial.color, i);
-		
-			if (tileArray[activeTile].renderer.material.color == warningMaterial.color){
-				animation = 2;
-				tileArray[activeTile].renderer.material.color = tileMaterial.color;
-				i = 0f;
-				rate = 1f/1.5f;
-			}
-		} else if (animation == 2){
-			i += Time.deltaTime*rate*2;
-			tileArray[activeTile].renderer.material.color = Color.Lerp(warningMaterial.color, tileMaterial.color, i);
-		
-			if (tileArray[activeTile].renderer.material.color == tileMaterial.color){
-				animation = 0;
-				i = 0f;
-			}
-		}
-	}
-	
 	void Awake (){
 		EventManager.OnMusic_ForeshadowBegin += ForeshadowBegin;
 		EventManager.OnMusic_ForeshadowConclusion += ForeshadowConclusion;
 	}
 	
 	
-	void ForeshadowBegin (int n, double m){
-		//Select a random Tile
-		activeTile = Random.Range(0,tileArray.Length-1);
-		rate = 1f/(float)m;
-		animation = 1;
+	void ForeshadowBegin (int id, double duration){
+		GameObject chosenGameobject = tileArray[Random.Range(0,tileArray.Length-1)];
+		StartCoroutine(AnimateColor((float)duration, chosenGameobject));
+		objectIDPairs.Add (new GameObjectIDPair(chosenGameobject, id));
 	}
 
+	IEnumerator AnimateColor(float duration, GameObject objectToColor) {
+		float startTime = Time.time;
 
+		// Color more
+		while(Time.time < startTime + duration) {
+			float degree = (Time.time - startTime) / duration;
+			objectToColor.renderer.material.color = Color.Lerp(tileMaterial.color, warningMaterial.color, degree);
+			yield return null;
+		}
 
-	void ForeshadowConclusion (int n, double m){
-		spike.ActivateStab(tileArray[activeTile].transform.position.x);
+		// Color less
+		startTime = Time.time;
+		while(Time.time < startTime + 1.5f) {
+			float degree = (Time.time - startTime) / 1.5f;
+			objectToColor.renderer.material.color = Color.Lerp(warningMaterial.color, tileMaterial.color, degree);
+			yield return null;
+		}
+
+		objectToColor.renderer.material.color = tileMaterial.color;
+		yield break;
 	}
 
+	void ForeshadowConclusion (int id, double duration){
+		GameObject intendedGameObject = null;
+		foreach (GameObjectIDPair objIDPair in objectIDPairs) {
+			if (objIDPair.id == id) {
+				intendedGameObject = objIDPair.obj;
+				break;
+			}
+		}
+
+		if (intendedGameObject != null) {
+			spike.ActivateStab(intendedGameObject.transform.position.x);
+		}
+	}
+
+}
+
+class GameObjectIDPair {
+	public GameObject obj;
+	public int id;
+
+	public GameObjectIDPair(GameObject gameObject, int id) {
+		this.obj = gameObject;
+		this.id = id;
+	}
 }
