@@ -91,7 +91,7 @@ public class Character2D : IPausable{
 		*/
 		rayHitComparer = new RayHitComparer ();
 		
-		SetUpAnimator();
+		//SetUpAnimator();
 
 
 	}
@@ -355,6 +355,15 @@ public class Character2D : IPausable{
 	{ 
 		float localGravityMultiplier = gravityMultiplier;
 		float localAirControl = airControl;
+
+
+		velocity.z = 0;
+		//TODO:unhack
+		//velocity.x /= 2;
+		
+
+
+
 
 		terminalAirVelocity.y = velocity.y;
 		

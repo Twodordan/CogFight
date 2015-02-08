@@ -11,6 +11,8 @@ public class Spike : MonoBehaviour {
 	private float stealthedY; //Stealthed position, for resetting the y position.
 	public bool animated = false; //For activating the animation
 
+    private AnimationCurve inheritedCurve;
+
 	void Start (){
 
 		//The script assumes the Spike is placed in the scene where it's stealthed
@@ -45,10 +47,11 @@ public class Spike : MonoBehaviour {
 		
 	}
 
-	public void ActivateStab(float x){
+	public void ActivateStab(float x, AnimationCurve curve){
 
 		if (!animated){
 			transform.position = new Vector3(x,stealthedY);
+            inheritedCurve = curve;
 			animated = true;
 		} else {
 			Debug.Log("Spike is already activated! Cannot activate until action is done!");

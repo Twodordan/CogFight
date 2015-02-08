@@ -20,6 +20,7 @@ public class EventManager : MonoBehaviour {
 
     public delegate void PlayerDeathAction(int playerID);
     public static event PlayerDeathAction OnPlayerDeath;
+    public static event BasicAction OnPlayerSwitch;
 
     public delegate void AudioStartAction(double syncTime, double clipLength);
     public static event AudioStartAction OnMusic_StartNewClip;
@@ -39,6 +40,7 @@ public class EventManager : MonoBehaviour {
         OnMusic_ForeshadowConclusion = null;
 
         OnPlayerDeath = null;
+        OnPlayerSwitch = null;
         OnMusic_StartNewClip = null;
     }
 
@@ -109,6 +111,12 @@ public class EventManager : MonoBehaviour {
     public static void PlayerDeath(int playerID) {
         if (OnPlayerDeath != null) {
             OnPlayerDeath(playerID);
+        }
+    }
+
+    public static void PlayerSwitch() {
+        if (OnPlayerSwitch != null) {
+            OnPlayerSwitch();
         }
     }
 }
