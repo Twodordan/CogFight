@@ -1,14 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCharacter\MultiplayerController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Spike.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerCharacter\MultiplayerController.cs" Line="54" Column="34" />
-      <File FileName="Assets\Scripts\Utils\IPausable.cs" Line="11" Column="3" />
+      <File FileName="Assets\Scripts\Utils\IPausable.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PlayerCharacter\Character2DUserControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2D.cs" Line="122" Column="71" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DController.cs" Line="120" Column="26" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DScriptControl.cs" Line="16" Column="3" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DSpringSettings.cs" Line="4" Column="39" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2D.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DScriptControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\MultiplayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ObstacleTrigger.cs" Line="8" Column="31" />
+      <File FileName="Assets\Scripts\Spike.cs" Line="38" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
