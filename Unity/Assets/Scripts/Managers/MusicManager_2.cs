@@ -140,36 +140,34 @@ public class MusicManager_2 : MonoBehaviour {
     }
 
     void ChangeFastToEndingTracks() {
-        if (StateManager.State == GameState.Playing) {
-            StopCoroutine(newClipWaitingRoutine);
+        StopCoroutine(newClipWaitingRoutine);
 
-            double initTime = GetTimeOfNextBar();
-            MusicWithInformation newTrack = GetNextBaseTrack();
+        double initTime = GetTimeOfNextBar();
+        MusicWithInformation newTrack = GetNextBaseTrack();
 
-            foreach (AudioSource source in sources) {
-                source.SetScheduledEndTime(initTime);
-            }
-
-            AudioSource newSource = sources[0];
-            newSource.clip = newTrack.clip;
-            newSource.volume = newTrack.volume;
-            newSource.PlayScheduled(initTime);
-            newSource.SetScheduledStartTime(initTime);
-
-
-
-            newSource.SetScheduledEndTime(initTime + newSource.clip.length);
-            newTrack.initTime = initTime;
-
-            Debug.Log("New clip interrupt! Name: " + newTrack.name);
-
-            initOfNextClip = initTime;
-
-            beatNumber = 0;
-            currentlyPlayingTrack = newTrack;
-
-            EventManager.Music_NewClip(initTime, newTrack.clip.length);
+        foreach (AudioSource source in sources) {
+            source.SetScheduledEndTime(initTime);
         }
+
+        AudioSource newSource = sources[0];
+        newSource.clip = newTrack.clip;
+        newSource.volume = newTrack.volume;
+        newSource.PlayScheduled(initTime);
+        newSource.SetScheduledStartTime(initTime);
+
+
+
+        newSource.SetScheduledEndTime(initTime + newSource.clip.length);
+        newTrack.initTime = initTime;
+
+        Debug.Log("New clip interrupt! Name: " + newTrack.name);
+
+        initOfNextClip = initTime;
+
+        beatNumber = 0;
+        currentlyPlayingTrack = newTrack;
+
+        EventManager.Music_NewClip(initTime, newTrack.clip.length);
     }
 
     public void StartForeshadowing(AudioCueType cueType) {
