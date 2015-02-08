@@ -9,10 +9,19 @@ public class ScoreManager : MonoBehaviour {
     [HideInInspector]
     public int player1Lives, player2Lives;
 
+    public AudioClip playerDeathSound;
+    private AudioSource deathSoundSource;
+
     GameObject player1Object, player2Object;
 
     void Awake() {
         singleton = this;
+        deathSoundSource = gameObject.AddComponent<AudioSource>();
+        deathSoundSource.loop = false;
+        deathSoundSource.playOnAwake = false;
+        deathSoundSource.bypassEffects = true;
+        deathSoundSource.bypassListenerEffects = true;
+        deathSoundSource.bypassReverbZones = true;
     }
 
     void Start() {
@@ -35,6 +44,8 @@ public class ScoreManager : MonoBehaviour {
         } else {
             player2Lives--;
         }
+
+        deathSoundSource.PlayOneShot(playerDeathSound);
     }
 
     Rect player1ScoreBox = new Rect(0, 0, 100, 40);
