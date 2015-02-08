@@ -13,7 +13,13 @@ public class MultiplayerController : MonoBehaviour {
 	[Range(1,8)]
 	public int switchPlayersEveryXBar = 1;
 	[Space(10)]
-	public List<Character2DController> players;
+
+	[SerializeField]
+	[Range(0,2)]
+	private int whichSceneToLoadOnReset = 0;
+
+	[SerializeField]
+	private List<Character2DController> players;
 
 	private int beatsCountedSinceSwitch = 0;
 
@@ -37,9 +43,19 @@ public class MultiplayerController : MonoBehaviour {
 		//TESTING TODO: remove
 		if(Input.GetButtonDown("Start")){
 			//bad
-			EventManager.StartGame();
+			//EventManager.StartGame();
+			//StateManager.State = GameState.Playing;
+
+			StateManager.Flags = StateFlags.ReadyForPlay;
+		}
+		else if(Input.GetButtonDown("Back")){
+
+			Application.LoadLevel(whichSceneToLoadOnReset);
+			//Application.loa
 		}
 
+
+		/*
 		if(Input.GetKeyDown(KeyCode.Space)){
 			//StateManager.State = GameState.Playing;
 			StateManager.Flags = StateFlags.ReadyForPlay;
@@ -47,6 +63,7 @@ public class MultiplayerController : MonoBehaviour {
 			//switchCharacters(1);
 			//pauseCharacters();
 		}
+		*/
 
 	}
 
@@ -67,7 +84,7 @@ public class MultiplayerController : MonoBehaviour {
 
 		beatsCountedSinceSwitch++;
 
-		if(switchPlayersEveryXBar >= switchPlayersEveryXBar){
+		if(beatsCountedSinceSwitch >= switchPlayersEveryXBar){
 
 			beatsCountedSinceSwitch = 0;
 			switchCharacters(0);
