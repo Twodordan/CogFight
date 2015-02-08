@@ -222,6 +222,10 @@ public class MusicManager_2 : MonoBehaviour {
         list.RemoveAt(0);
     }
 
+    void OnDestroy() {
+        StopAllCoroutines();
+    }
+
     public static void SyncSourceSettings(AudioSource original, ref AudioSource next) {
         next.loop = original.loop;
         next.volume = original.volume;
