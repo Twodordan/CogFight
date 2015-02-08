@@ -220,8 +220,10 @@ public class MusicManager_2 : MonoBehaviour {
     void Update() {
         TrimForeshadowSourceControllers();
 
-        if (Input.GetButtonDown("Back")) {
-            StateManager.State = GameState.Ended;
+        if (StateManager.State != GameState.Ended) {
+            if (Input.GetButtonDown("Back")) {
+                StateManager.State = GameState.Ended;
+            }
         }
     }
 
