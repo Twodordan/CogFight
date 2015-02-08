@@ -218,7 +218,7 @@ public class MusicManager_2 : MonoBehaviour {
     void Update() {
         TrimForeshadowSourceControllers();
 
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetButtonDown("Back")) {
             StateManager.State = GameState.Ended;
         }
     }

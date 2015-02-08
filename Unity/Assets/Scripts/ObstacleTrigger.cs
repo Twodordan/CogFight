@@ -31,6 +31,8 @@ public class ObstacleTrigger : MonoBehaviour {
 		if (tileArray.Length == 0) {
 			Debug.Log("No game objects are tagged with Tile");
 		}
+
+        spikeStealthedY = spike.transform.position.y;
 	}
 
 	void Awake (){
@@ -85,7 +87,6 @@ public class ObstacleTrigger : MonoBehaviour {
 	}
 
     IEnumerator AnimateSpike(float x) {
-        spikeStealthedY = spike.transform.position.y;
 
         spike.transform.position = new Vector3(x, spikeStealthedY);
 
@@ -105,6 +106,9 @@ public class ObstacleTrigger : MonoBehaviour {
             spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate(1 - (Time.time - startTimeStamp) / spikeRetractDuration));
             yield return null;
         }
+
+        spike.transform.position = startPosition;
+
         spikeCoroutine = null;
         yield break;
     }
