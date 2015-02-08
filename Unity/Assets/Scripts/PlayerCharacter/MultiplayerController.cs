@@ -23,6 +23,10 @@ public class MultiplayerController : MonoBehaviour {
 
 	private int beatsCountedSinceSwitch = 0;
 
+	//TODO; also hacks
+	private Vector3 initP1Position;
+	private Vector3 initP2Position;
+
 	void Awake () {
 		EventManager.OnGameStart += unpauseChars;
 		//EventManager.OnGameEnd += pauseChars;
@@ -35,6 +39,9 @@ public class MultiplayerController : MonoBehaviour {
 
 		pauseChars();
 
+		//TODO: hack
+		initP1Position = players[0].transform.position;
+		initP2Position = players[1].transform.position;
 	}
 
 	// Update is called once per frame
@@ -84,6 +91,12 @@ public class MultiplayerController : MonoBehaviour {
 		Application.LoadLevel(whichSceneToLoadOnReset);
 	}
 
+	//TODO hack
+	public void resetCharactersPosition(){
+		players[0].transform.position = initP1Position;
+		players[1].transform.position = initP2Position;
+	}
+
 	public void unpauseChars(){
 		setPauseCharacters(false);
 	}
@@ -120,6 +133,8 @@ public class MultiplayerController : MonoBehaviour {
 			Character2DController tmp = players[(int)PlayerNumber.One-1];
 			players[(int)PlayerNumber.One-1] = players[(int)PlayerNumber.Two-1];
 			players[(int)PlayerNumber.Two-1] = tmp;
+
+			EventManager.PlayerSwitch();
 		}
 
 

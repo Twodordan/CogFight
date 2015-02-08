@@ -41,7 +41,7 @@ public class Character2DScriptControl:MonoBehaviour{
 		//TODO
 		float tempHack = 1;
 		if(!onGround){
-			tempHack = 3f;
+			tempHack = 2.75f;
 			//Debug.Log("Not On Goround ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
 		}
 
