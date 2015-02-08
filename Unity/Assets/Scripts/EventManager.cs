@@ -13,6 +13,9 @@ public class EventManager : MonoBehaviour {
     public static event IntegerAction OnMusic_Beat;
     public static event BasicAction OnMusic_Bar;
 
+    public static event IntegerAction OnMusic_ForeshadowBegin;
+    public static event IntegerAction OnMusic_ForeshadowConclusion;
+
     public delegate void PlayerDeathAction(int playerID);
     public static event PlayerDeathAction OnPlayerDeath;
 
@@ -58,6 +61,18 @@ public class EventManager : MonoBehaviour {
     public static void Music_Bar() {
         if (OnMusic_Bar != null) {
             OnMusic_Bar();
+        }
+    }
+
+    public static void Music_ForeshadowBegin(int id) {
+        if (OnMusic_ForeshadowBegin != null) {
+            OnMusic_ForeshadowBegin(id);
+        }
+    }
+
+    public static void Music_ForeshadowConclusion(int id) {
+        if (OnMusic_ForeshadowConclusion != null) {
+            OnMusic_ForeshadowConclusion(id);
         }
     }
 
