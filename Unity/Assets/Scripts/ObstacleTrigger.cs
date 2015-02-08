@@ -60,6 +60,7 @@ public class ObstacleTrigger : MonoBehaviour {
     bool playerDeath = false;
 
     IEnumerator PlayerDeathTimer(int id) {
+        objectIDPairs.Clear();
         playerDeath = true;
         yield return new WaitForSeconds(1.5f);
         playerDeath = false;
@@ -102,18 +103,20 @@ public class ObstacleTrigger : MonoBehaviour {
 	}
 
 	void ForeshadowConclusion (int id, double duration){
-		GameObject intendedGameObject = null;
-		foreach (GameObjectIDPair objIDPair in objectIDPairs) {
-			if (objIDPair.id == id) {
-				intendedGameObject = objIDPair.obj;
-				break;
-			}
-		}
+        if (!playerDeath) {
+            GameObject intendedGameObject = null;
+            foreach (GameObjectIDPair objIDPair in objectIDPairs) {
+                if (objIDPair.id == id) {
+                    intendedGameObject = objIDPair.obj;
+                    break;
+                }
+            }
 
-		if (intendedGameObject != null && spikeCoroutine == null) {
-			//spike.ActivateStab(intendedGameObject.transform.position.x);
-            spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
-		}
+            if (intendedGameObject != null) {
+                //spike.ActivateStab(intendedGameObject.transform.position.x);
+                spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
+            }
+        }
 	}
 
     IEnumerator AnimateSpike(float x) {
