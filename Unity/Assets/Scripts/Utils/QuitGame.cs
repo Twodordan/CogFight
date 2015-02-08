@@ -3,14 +3,16 @@ using System.Collections;
 
 public class QuitGame : MonoBehaviour {
 
-    static QuitGame singleton;
+    static QuitGame singleton = null;
 
     void Awake() {
-        singleton = this;
+        if (singleton == null) {
+            singleton = this;
+        }
     }
 
     void Start() {
-        if (singleton != this) {
+        if (singleton == this) {
             DontDestroyOnLoad(this.gameObject);
         } else {
             Destroy(this.gameObject);
