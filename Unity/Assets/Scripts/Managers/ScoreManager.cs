@@ -95,8 +95,8 @@ public class ScoreManager : MonoBehaviour {
     }
 
 
-    Rect player1ScoreBox = new Rect(0, 0, 100, 40);
-    Rect player2ScoreBox = new Rect(Screen.width - 100, 0, 100, 40);
+    Rect player1ScoreBox = new Rect(Screen.width / 2f - 130, 0, 120, 40);
+    Rect player2ScoreBox = new Rect(Screen.width / 2f + 10, 0, 120, 40);
 
     Rect centerRect = new Rect(Screen.width / 5f, Screen.height / 5f, Screen.width - 2 * Screen.width / 5f, Screen.height - 2 * Screen.height / 5f);
 
