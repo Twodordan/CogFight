@@ -43,6 +43,7 @@ public class ObstacleTrigger : MonoBehaviour {
 	void Awake (){
 		EventManager.OnMusic_ForeshadowBegin += ForeshadowBegin;
 		EventManager.OnMusic_ForeshadowConclusion += ForeshadowConclusion;
+        EventManager.OnPlayerDeath += (int id) => { StartCoroutine(PlayerDeathTimer(id)); };
 	}
 
 	void ForeshadowBegin (int id, double duration){
@@ -56,23 +57,42 @@ public class ObstacleTrigger : MonoBehaviour {
 		objectIDPairs.Add (new GameObjectIDPair(chosenGameobject, id));
 	}
 
+    bool playerDeath = false;
+
+    IEnumerator PlayerDeathTimer(int id) {
+        playerDeath = true;
+        yield return new WaitForSeconds(1.5f);
+        playerDeath = false;
+        yield break;
+    }
+
 	IEnumerator AnimateColor(float duration, GameObject objectToColor) {
 		float startTime = Time.time;
         activeTiles.Add(objectToColor);
         Color colorAtBeginning = objectToColor.renderer.material.color;
 
 		// Color more
-		while(Time.time < startTime + duration) {
+		while(Time.time < startTime + duration && !playerDeath) {
 			float degree = (Time.time - startTime) / duration;
             objectToColor.renderer.material.color = Color.Lerp(colorAtBeginning, warningMaterial.color, degree);
+
+            if (playerDeath) {
+                break;
+            }
+
 			yield return null;
 		}
 
 		// Color less
 		startTime = Time.time;
-		while(Time.time < startTime + 1.5f) {
+		while(Time.time < startTime + 1.5f && !playerDeath) {
 			float degree = (Time.time - startTime) / 1.5f;
             objectToColor.renderer.material.color = Color.Lerp(warningMaterial.color, colorAtBeginning, degree);
+
+            if (playerDeath) {
+                break;
+            }
+
 			yield return null;
 		}
 
