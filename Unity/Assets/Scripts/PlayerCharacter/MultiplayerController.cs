@@ -133,6 +133,8 @@ public class MultiplayerController : MonoBehaviour {
 			Character2DController tmp = players[(int)PlayerNumber.One-1];
 			players[(int)PlayerNumber.One-1] = players[(int)PlayerNumber.Two-1];
 			players[(int)PlayerNumber.Two-1] = tmp;
+
+			EventManager.PlayerSwitch();
 		}
 
 
