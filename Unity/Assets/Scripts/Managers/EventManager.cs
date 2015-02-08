@@ -24,6 +24,24 @@ public class EventManager : MonoBehaviour {
     public delegate void AudioStartAction(double syncTime, double clipLength);
     public static event AudioStartAction OnMusic_StartNewClip;
 
+    void OnDestroy() {
+        OnGameStart = null;
+        OnGameEnd = null;
+        OnGamePause = null;
+
+        OnDifficultyChange = null;
+        OnTerminateLevel = null;
+
+        OnMusic_Beat = null;
+        OnMusic_Bar = null;
+
+        OnMusic_ForeshadowBegin = null;
+        OnMusic_ForeshadowConclusion = null;
+
+        OnPlayerDeath = null;
+        OnMusic_StartNewClip = null;
+    }
+
     public static void StartGame() {
         if (OnGameStart != null) {
             OnGameStart();

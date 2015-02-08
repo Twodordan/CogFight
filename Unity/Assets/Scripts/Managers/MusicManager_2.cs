@@ -235,6 +235,7 @@ public class MusicManager_2 : MonoBehaviour {
 
     void OnTerminateLevel() {
         StopAllCoroutines();
+        Destroy(this);
     }
 
     public static void SyncSourceSettings(AudioSource original, ref AudioSource next) {
