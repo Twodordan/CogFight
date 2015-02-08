@@ -8,7 +8,8 @@ public class EventManager : MonoBehaviour {
     public static event BasicAction OnGameEnd;
     public static event BasicAction OnDifficultyChange;
 
-    public static event BasicAction OnMusic_Beat;
+    public delegate void IntegerAction(int n);
+    public static event IntegerAction OnMusic_Beat;
     public static event BasicAction OnMusic_Bar;
 
     public delegate void PlayerDeathAction(int playerID);
@@ -35,14 +36,16 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    public static void Music_Beat() {
+    public static void Music_Beat(int n) {
         if (OnMusic_Beat != null) {
-            OnMusic_Beat();
+            OnMusic_Beat(n);
         }
     }
 
     public static void Music_Bar() {
-        OnMusic_Bar();
+        if (OnMusic_Bar != null) {
+            OnMusic_Bar();
+        }
     }
 
     public static void PlayerDeath(int playerID) {
