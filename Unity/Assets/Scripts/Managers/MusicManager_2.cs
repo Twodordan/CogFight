@@ -32,6 +32,8 @@ public class MusicManager_2 : MonoBehaviour {
 
     int foreshadowID = 0;
 
+    Coroutine newClipWaitingRoutine;
+
     IEnumerator Start() {
         yield return new WaitForSeconds(musicDelay);
 
@@ -45,7 +47,8 @@ public class MusicManager_2 : MonoBehaviour {
             sources.Add(newAudio);
         }
 
-        EventManager.OnMusic_StartNewClip += (double syncTime, double clipLength) => { StartCoroutine(OnNewClip(syncTime, clipLength)); };
+        EventManager.OnMusic_StartNewClip += (double syncTime, double clipLength) => { newClipWaitingRoutine = StartCoroutine(OnNewClip(syncTime, clipLength)); };
+        EventManager.OnGameEnd += ChangeFastToEndingTracks;
         EventManager.OnTerminateLevel += OnTerminateLevel;
 
         double initTime = AudioSettings.dspTime;
@@ -76,8 +79,8 @@ public class MusicManager_2 : MonoBehaviour {
 
             beatNumber = 0;
             currentlyPlayingTrack = newTrack;
-            EventManager.Music_NewClip(initTime, newTrack.clip.length);
 
+            EventManager.Music_NewClip(initTime, newTrack.clip.length);
             yield break;
         } else {
             Debug.Log("Returned null track");
@@ -130,13 +133,50 @@ public class MusicManager_2 : MonoBehaviour {
         return result.Copy();
     }
 
+    double GetTimeOfNextBar() {
+        double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
+        double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
+        return initTime;
+    }
+
+    void ChangeFastToEndingTracks() {
+        StopCoroutine(newClipWaitingRoutine);
+
+        double initTime = GetTimeOfNextBar();
+        MusicWithInformation newTrack = GetNextBaseTrack();
+
+        foreach (AudioSource source in sources) {
+            source.SetScheduledEndTime(initTime);
+        }
+
+        AudioSource newSource = sources[0];
+        newSource.clip = newTrack.clip;
+        newSource.volume = newTrack.volume;
+        newSource.PlayScheduled(initTime);
+        newSource.SetScheduledStartTime(initTime);
+
+        
+
+        newSource.SetScheduledEndTime(initTime + newSource.clip.length);
+        newTrack.initTime = initTime;
+
+        Debug.Log("New clip interrupt! Name: " + newTrack.name);
+
+        initOfNextClip = initTime;
+
+        beatNumber = 0;
+        currentlyPlayingTrack = newTrack;
+
+        EventManager.Music_NewClip(initTime, newTrack.clip.length);
+    }
+
     public void StartForeshadowing(AudioCueType cueType) {
         if (StateManager.State == GameState.Playing) {
             AudioSource foreshadow = gameObject.AddComponent<AudioSource>();
 
             SyncSourceSettings(audio, ref foreshadow);
             MusicWithInformation foreshadowTrack;
-            
+
             if (cueType == AudioCueType.Foreshadow_Long) {
                 foreshadowTrack = foreshadowTracksLong[0];
                 CycleList(ref foreshadowTracksLong);
@@ -150,8 +190,7 @@ public class MusicManager_2 : MonoBehaviour {
             foreshadow.clip = foreshadowTrack.clip;
             foreshadow.volume = foreshadowTrack.volume;
 
-            double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
-            double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
+            double initTime = GetTimeOfNextBar();
             foreshadow.PlayScheduled(initTime);
             foreshadow.SetScheduledStartTime(initTime);
             AudioSourceController controller = new AudioSourceController(initTime, foreshadow, foreshadowTracksLong[0].cueType);
@@ -161,7 +200,7 @@ public class MusicManager_2 : MonoBehaviour {
 
             //EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
 
-            
+            double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
 
             if (cueType == AudioCueType.Foreshadow_Long) {
                 StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, currentBeatDuration * 8));
