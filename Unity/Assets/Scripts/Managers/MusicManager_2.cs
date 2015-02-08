@@ -158,11 +158,13 @@ public class MusicManager_2 : MonoBehaviour {
 
             //EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
 
-            StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, foreshadow.clip.length));
+            
 
             if (cueType == AudioCueType.Foreshadow_Long) {
+                StartCoroutine(CallForeshadowBegin(currentBeatDuration * 8, id, foreshadow.clip.length));
                 StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
             } else if (cueType == AudioCueType.Foreshadow_Short) {
+                StartCoroutine(CallForeshadowBegin(currentBeatDuration * 4, id, foreshadow.clip.length));
                 StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id, foreshadow.clip.length));
             } else if (controller.cueType == AudioCueType.UNDEFINED) {
                 Debug.LogWarning("Tried to activate a foreshadow countdown but the clip had the UNDEFINED cue type");
@@ -243,8 +245,10 @@ public class MusicManager_2 : MonoBehaviour {
     }
 
     void QueuedEventSetStatePlaying(double time, double clipLength) {
-        StateManager.State = GameState.Playing;
-        EventManager.OnMusic_StartNewClip -= QueuedEventSetStatePlaying;
+        if (StateManager.State == GameState.Beginning) {
+            StateManager.State = GameState.Playing;
+            EventManager.OnMusic_StartNewClip -= QueuedEventSetStatePlaying;
+        }
     }
 
     void QueuedEventQuit(double time, double clipLength) {
