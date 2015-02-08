@@ -7,7 +7,7 @@ public class Instructions : MonoBehaviour {
 
 
 	void OnGUI() {
-		if( StateManager.State==GameState.Beginning) GUI.DrawTexture (new Rect (Screen.width / 3f, Screen.height / 3f, Screen.width/3f, Screen.height/3f), backgroundTexture);
+		if( StateManager.State==GameState.Beginning) GUI.DrawTexture (new Rect (Screen.width / 4f, Screen.height / 4f, Screen.width/2f, Screen.height/2f), backgroundTexture);
 	}
 	
 
