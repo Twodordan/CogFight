@@ -63,6 +63,8 @@ public class MusicManager_2 : MonoBehaviour {
             newSource.clip = newTrack.clip;
             newSource.volume = newTrack.volume;
             newSource.PlayScheduled(initTime);
+            //newSource.SetScheduledStartTime(initTime);
+            newSource.SetScheduledEndTime(initTime + newSource.clip.samples);
             newTrack.initTime = initTime;
 
             Debug.Log("New clip queued! Name: " + newTrack.name);
@@ -70,7 +72,7 @@ public class MusicManager_2 : MonoBehaviour {
             CycleList(ref sources);
 
             initOfNextClip = initTime;
-            yield return new WaitForSeconds((float)(initTime - AudioSettings.dspTime - Time.fixedDeltaTime));
+            yield return new WaitForSeconds((float)(initTime - AudioSettings.dspTime));
 
             beatNumber = 0;
             currentlyPlayingTrack = newTrack;
@@ -98,7 +100,7 @@ public class MusicManager_2 : MonoBehaviour {
                     CycleList(ref trackList);
                 } else {
                     if (beginTrackIndex > beginTracks.Count - 1) {
-                        beginTrackIndex = beginTracks.Count - 1;
+                        beginTrackIndex = 0;
                     }
                     result = beginTracks[beginTrackIndex];
                     beginTrackIndex++;

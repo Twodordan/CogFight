@@ -23,12 +23,8 @@ public class EventManager : MonoBehaviour {
     public static event AudioStartAction OnMusic_StartNewClip;
 
     public static void StartGame() {
-        if (StateManager.State == GameState.Beginning) {
-            if (OnGameStart != null) {
-                OnGameStart();
-            }
-        } else {
-            Debug.LogWarning("Trying to start game while not in 'Beginning' state! Consider calling level load at the origin of this message");
+        if (OnGameStart != null) {
+            OnGameStart();
         }
     }
 
