@@ -20,9 +20,12 @@ public class ForeshadowPlanner : MonoBehaviour {
 
     MusicManager_2 musicManager;
 
+    bool blockForeshadow = false;
+
     void Start() {
         EventManager.OnGameStart += Initialize;
         EventManager.OnDifficultyChange += OnDifficultyChanged;
+        EventManager.OnPlayerDeath += (int id) => { StartCoroutine(BlockForeshadows(id)); };
     }
 
     void Initialize() {
@@ -35,8 +38,14 @@ public class ForeshadowPlanner : MonoBehaviour {
         musicManager = GetComponent<MusicManager_2>();
     }
 
+    IEnumerator BlockForeshadows(int id) {
+        blockForeshadow = true;
+        yield return new WaitForSeconds(1.75f);
+        blockForeshadow = false;
+    }
+
     void FixedUpdate() {
-        if (StateManager.State == GameState.Playing) {
+        if (StateManager.State == GameState.Playing && !blockForeshadow) {
             if (Time.time > nextForeshadow) {
                 lastForeshadow = Time.time;
 
