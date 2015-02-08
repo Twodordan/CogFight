@@ -11,18 +11,28 @@ public class ScoreManager : MonoBehaviour {
 
     public AudioClip playerDeathSound;
     public AudioClip playerSwitchSound;
-    private AudioSource managerSoundSource;
+    private AudioSource playerDeathSource;
+    private AudioSource playerSwitchSource;
 
     GameObject player1Object, player2Object;
 
     void Awake() {
         singleton = this;
-        managerSoundSource = gameObject.AddComponent<AudioSource>();
-        managerSoundSource.loop = false;
-        managerSoundSource.playOnAwake = false;
-        managerSoundSource.bypassEffects = true;
-        managerSoundSource.bypassListenerEffects = true;
-        managerSoundSource.bypassReverbZones = true;
+
+        playerDeathSource = gameObject.AddComponent<AudioSource>();
+        playerDeathSource.loop = false;
+        playerDeathSource.playOnAwake = false;
+        playerDeathSource.bypassEffects = true;
+        playerDeathSource.bypassListenerEffects = true;
+        playerDeathSource.bypassReverbZones = true;
+        playerDeathSource.volume = 0.2f;
+
+        playerSwitchSource = gameObject.AddComponent<AudioSource>();
+        playerSwitchSource.loop = false;
+        playerSwitchSource.playOnAwake = false;
+        playerSwitchSource.bypassEffects = true;
+        playerSwitchSource.bypassListenerEffects = true;
+        playerSwitchSource.bypassReverbZones = true;
     }
 
     void Start() {
@@ -47,11 +57,12 @@ public class ScoreManager : MonoBehaviour {
             player2Lives--;
         }
 
-        managerSoundSource.PlayOneShot(playerDeathSound);
+        
+        playerDeathSource.PlayOneShot(playerDeathSound);
     }
 
     void OnPlayerSwitch() {
-        managerSoundSource.PlayOneShot(playerSwitchSound);
+        playerSwitchSource.PlayOneShot(playerSwitchSound);
     }
 
     Rect player1ScoreBox = new Rect(0, 0, 100, 40);
@@ -61,15 +72,15 @@ public class ScoreManager : MonoBehaviour {
 
     void OnGUI() {
         if (StateManager.State != GameState.Ended) {
-            GUI.Label(player1ScoreBox, "Player 1 lives: " + player1Lives.ToString());
-            GUI.Label(player2ScoreBox, "Player 2 lives: " + player2Lives.ToString());
+            GUI.Box(player1ScoreBox, "Player 1 lives: " + player1Lives.ToString());
+            GUI.Box(player2ScoreBox, "Player 2 lives: " + player2Lives.ToString());
         } else {
             if (player1Lives > player2Lives) {
-                GUI.Label(centerRect, "Player 1 wins!");
+                GUI.Box(centerRect, "Player 1 wins!");
             } else if (player1Lives == player2Lives) {
-                GUI.Label(centerRect, "Draw!");
+                GUI.Box(centerRect, "Draw!");
             } else {
-                GUI.Label(centerRect, "Player 2 wins!");
+                GUI.Box(centerRect, "Player 2 wins!");
             }
         }
     }
