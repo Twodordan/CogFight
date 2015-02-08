@@ -127,36 +127,60 @@ public class MusicManager_2 : MonoBehaviour {
         return result.Copy();
     }
 
+    public void StartForeshadowing(AudioCueType cueType) {
+        if (StateManager.State == GameState.Playing) {
+            AudioSource foreshadow = gameObject.AddComponent<AudioSource>();
 
+            SyncSourceSettings(audio, ref foreshadow);
+            MusicWithInformation foreshadowTrack;
+            
+            if (cueType == AudioCueType.Foreshadow_Long) {
+                foreshadowTrack = foreshadowTracksLong[0];
+                CycleList(ref foreshadowTracksLong);
+            } else if (cueType == AudioCueType.Foreshadow_Short) {
+                foreshadowTrack = foreshadowTracksShort[0];
+                CycleList(ref foreshadowTracksShort);
+            } else {
+                return;
+            }
+
+            foreshadow.clip = foreshadowTrack.clip;
+            foreshadow.volume = foreshadowTrack.volume;
+
+            double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
+            double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
+            foreshadow.PlayScheduled(initTime);
+            foreshadow.SetScheduledStartTime(initTime);
+            AudioSourceController controller = new AudioSourceController(initTime, foreshadow, foreshadowTracksLong[0].cueType);
+            foreshadowSourceControllers.Add(controller);
+
+            int id = foreshadowID++;
+
+            //EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
+
+            StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, foreshadow.clip.length));
+
+            if (cueType == AudioCueType.Foreshadow_Long) {
+                StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
+            } else if (cueType == AudioCueType.Foreshadow_Short) {
+                StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id, foreshadow.clip.length));
+            } else if (controller.cueType == AudioCueType.UNDEFINED) {
+                Debug.LogWarning("Tried to activate a foreshadow countdown but the clip had the UNDEFINED cue type");
+            }
+        }
+    }
 
     // DEBUG
     void Update() {
         if (Input.GetKeyDown(KeyCode.P)) {
             if (StateManager.State == GameState.Playing) {
-                AudioSource foreshadow = gameObject.AddComponent<AudioSource>();
-                SyncSourceSettings(audio, ref foreshadow);
-                foreshadow.clip = foreshadowTracksLong[0].clip;
-                foreshadow.volume = foreshadowTracksLong[0].volume;
-                double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
-                double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
-                foreshadow.PlayScheduled(initTime);
-                foreshadow.SetScheduledStartTime(initTime);
-                AudioSourceController controller = new AudioSourceController(initTime, foreshadow, foreshadowTracksLong[0].cueType);
-                foreshadowSourceControllers.Add(controller);
+                StartForeshadowing(AudioCueType.Foreshadow_Long);
+            }
+        }
 
-                int id = foreshadowID++;
-
-                //EventManager.Music_ForeshadowBegin(id, foreshadow.clip.length);
-
-                StartCoroutine(CallForeshadowBegin(initTime - AudioSettings.dspTime, id, foreshadow.clip.length));
-
-                if (controller.cueType == AudioCueType.Foreshadow_Long) {
-                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 8, id, foreshadow.clip.length));
-                } else if (controller.cueType == AudioCueType.Foreshadow_Short) {
-                    StartCoroutine(CallForeshadowEvent(initTime - AudioSettings.dspTime + currentBeatDuration * 4, id, foreshadow.clip.length));
-                } else if (controller.cueType == AudioCueType.UNDEFINED) {
-                    Debug.LogWarning("Tried to activate a foreshadow countdown but the clip had the UNDEFINED cue type");
-                }
+        if (Input.GetKeyDown(KeyCode.O)) {
+            if (StateManager.State == GameState.Playing) {
+                StartForeshadowing(AudioCueType.Foreshadow_Short);
             }
         }
 
@@ -261,6 +285,7 @@ public class MusicWithInformation {
 
     [HideInInspector]
     public double initTime;
+    [HideInInspector]
     public AudioCueType cueType;
 
     public MusicWithInformation Copy() {
@@ -279,6 +304,8 @@ public class MusicWithInformation {
 public class AudioSourceController {
     public AudioSource source;
     public double initTime;
+
+    [HideInInspector]
     public AudioCueType cueType;
 
     public AudioSourceController(double initTime, AudioSource source, AudioCueType type) {
