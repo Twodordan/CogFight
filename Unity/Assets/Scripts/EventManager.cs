@@ -6,6 +6,7 @@ public class EventManager : MonoBehaviour {
     public delegate void BasicAction();
     public static event BasicAction OnGameStart;
     public static event BasicAction OnGameEnd;
+    public static event BasicAction OnGamePause;
     public static event BasicAction OnDifficultyChange;
 
     public delegate void IntegerAction(int n);
@@ -19,15 +20,27 @@ public class EventManager : MonoBehaviour {
     public static event AudioStartAction OnMusic_StartNewClip;
 
     public static void StartGame() {
-        OnGameStart();
+        if (OnGameStart != null) {
+            OnGameStart();
+        }
     }
 
     public static void EndGame() {
-        OnGameEnd();
+        if (OnGameEnd != null) {
+            OnGameEnd();
+        }
+    }
+
+    public static void PauseGame() {
+        if (OnGamePause != null) {
+            OnGamePause();
+        }
     }
 
     public static void DifficultyChanged() {
-        OnDifficultyChange();
+        if (OnDifficultyChange != null) {
+            OnDifficultyChange();
+        }
     }
 
     public static void Music_NewClip(double syncTime, double clipLength) {
@@ -49,6 +62,8 @@ public class EventManager : MonoBehaviour {
     }
 
     public static void PlayerDeath(int playerID) {
-        OnPlayerDeath(playerID);
+        if (OnPlayerDeath != null) {
+            OnPlayerDeath(playerID);
+        }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum AudioCueType { UNDEFINED, BaseTrack, Foreshadow_Short, Foreshadow_Long };
+
 [RequireComponent(typeof(AudioSource))]
 public class MusicManager_2 : MonoBehaviour {
 
@@ -13,13 +15,14 @@ public class MusicManager_2 : MonoBehaviour {
     public List<MusicWithInformation> endTracks;
 
     public List<MusicWithInformation> trackList;
-    public List<MusicWithInformation> foreshadowTracks;
+    public List<MusicWithInformation> foreshadowTracksLong;
+    public List<MusicWithInformation> foreshadowTracksShort;
 
     MusicWithInformation currentlyPlayingTrack;
     List<MusicWithInformation> currentTrackQueue = new List<MusicWithInformation>();
     
     List<AudioSource> sources = new List<AudioSource>();
-    List<AudioSourceController> foreshadowSources = new List<AudioSourceController>();
+    List<AudioSourceController> foreshadowSourceControllers = new List<AudioSourceController>();
 
     int beatNumber = 0;
     double lastBeatTime = 0;
@@ -55,6 +58,7 @@ public class MusicManager_2 : MonoBehaviour {
 
             AudioSource newSource = sources[0];
             newSource.clip = newTrack.clip;
+            newSource.volume = newTrack.volume;
             newSource.PlayScheduled(initTime);
             newTrack.initTime = initTime;
 
@@ -114,11 +118,17 @@ public class MusicManager_2 : MonoBehaviour {
             if (StateManager.State == GameState.Playing) {
                 AudioSource foreshadow = gameObject.AddComponent<AudioSource>();
                 SyncSourceSettings(audio, ref foreshadow);
-                foreshadow.clip = foreshadowTracks[0].clip;
+                foreshadow.clip = foreshadowTracksLong[0].clip;
+                foreshadow.volume = foreshadowTracksLong[0].volume;
                 double currentBeatDuration = 60.0 / (currentlyPlayingTrack.BPM);
+                double initTime = currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration;
                 foreshadow.PlayScheduled(currentlyPlayingTrack.initTime + (beatNumber + (4 - beatNumber % 4)) * currentBeatDuration);
+                AudioSourceController controller = new AudioSourceController(initTime, foreshadow, foreshadowTracksLong[0].cueType);
+                foreshadowSourceControllers.Add(controller);
             }
         }
+
+
     }
 
     void FixedUpdate() {
@@ -133,10 +143,30 @@ public class MusicManager_2 : MonoBehaviour {
                 lastBeatTime = currentlyPlayingTrack.initTime + currentBeatDuration * beatNumber;
             }
         }
+
+        TrimForeshadowSourceControllers();
     }
 
     void OnGUI() {
         GUI.Label(new Rect(0, 0, 100, 100), ((beatNumber - 1) / 4 + 1).ToString());
+    }
+
+    void TrimForeshadowSourceControllers() {
+        List<AudioSourceController> removeList = new List<AudioSourceController>();
+
+        foreach (AudioSourceController asc in foreshadowSourceControllers) {
+            if (AudioSettings.dspTime > asc.initTime + Time.fixedDeltaTime) {
+                if (!asc.source.isPlaying) {
+                    removeList.Add(asc);
+                }
+            }
+        }
+
+        foreach (AudioSourceController asc in removeList) {
+            foreshadowSourceControllers.Remove(asc);
+            Destroy(asc.source);
+        }
+
     }
 
     double GetNextBeatTime() {
@@ -177,17 +207,23 @@ public class MusicManager_2 : MonoBehaviour {
 public class MusicWithInformation {
     public string name = "";
     public AudioClip clip;
-    public float BPM = 120f;
+    public float BPM = 144f;
+    public float volume = 1f;
+
     public float chanceWeight = 1f;
 
+    [HideInInspector]
     public double initTime;
+    public AudioCueType cueType;
 
     public MusicWithInformation Copy() {
         MusicWithInformation result = new MusicWithInformation();
         result.name = name;
         result.clip = clip;
         result.BPM = BPM;
+        result.volume = volume;
         result.chanceWeight = chanceWeight;
+        result.cueType = cueType;
 
         return result;
     }
@@ -196,10 +232,18 @@ public class MusicWithInformation {
 public class AudioSourceController {
     public AudioSource source;
     public double initTime;
+    public AudioCueType cueType;
 
-    public AudioSourceController(double initTime, AudioClip clip, AudioSource copySettings) {
+    public AudioSourceController(double initTime, AudioSource source, AudioCueType type) {
+        this.source = source;
+        this.initTime = initTime;
+        cueType = type;
+    }
+
+    public AudioSourceController(double initTime, AudioClip clip, AudioSource copySettings, AudioCueType type) {
         MusicManager_2.SyncSourceSettings(copySettings, ref source);
         source.clip = clip;
         this.initTime = initTime;
+        cueType = type;
     }
 }
