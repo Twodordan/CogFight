@@ -1,17 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCharacter\Character2D.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\line.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerCharacter\MultiplayerController.cs" Line="56" Column="35" />
       <File FileName="Assets\Scripts\Utils\IPausable.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PlayerCharacter\Character2DUserControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2D.cs" Line="94" Column="3" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DController.cs" Line="142" Column="5" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DScriptControl.cs" Line="16" Column="3" />
-      <File FileName="Assets\Scripts\PlayerCharacter\Character2DSpringSettings.cs" Line="4" Column="39" />
-      <File FileName="Assets\Scripts\Managers\MusicManager_2.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Managers\EventManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ObstacleTrigger.cs" Line="14" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2D.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\Character2DScriptControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerCharacter\MultiplayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ObstacleTrigger.cs" Line="36" Column="29" />
+      <File FileName="Assets\Scripts\Spike.cs" Line="8" Column="33" />
+      <File FileName="Assets\Scripts\line.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
