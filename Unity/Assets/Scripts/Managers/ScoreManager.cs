@@ -35,6 +35,7 @@ public class ScoreManager : MonoBehaviour {
         playerSwitchSource.bypassEffects = true;
         playerSwitchSource.bypassListenerEffects = true;
         playerSwitchSource.bypassReverbZones = true;
+        playerSwitchSource.volume = 0.35f;
     }
 
     void Start() {
@@ -73,17 +74,19 @@ public class ScoreManager : MonoBehaviour {
     }
 
     IEnumerator SwitchAnimation() {
+        Debug.Log("SWITCH");
+
         float startTime = Time.time;
 
-        Transform player1Pivot = player1Object.GetComponentInChildren<Transform>();
+        Transform player1Pivot = player1Object.transform.GetChild(0);
         Vector3 player1StartScale = player1Pivot.localScale;
-        Transform player2Pivot = player2Object.GetComponentInChildren<Transform>();
+        Transform player2Pivot = player2Object.transform.GetChild(0);
         Vector3 player2StartScale = player2Pivot.localScale;
 
-        while (Time.time > startTime + 0.25f) {
-            float t = (Time.time - startTime) / 0.25f;
-            player1Pivot.localScale = player1StartScale * (1 + switchAnimationCurve.Evaluate(t));
-            player2Pivot.localScale = player2StartScale * (1 + switchAnimationCurve.Evaluate(t));
+        while (Time.time < startTime + 0.3f) {
+            float t = (Time.time - startTime) / 0.3f;
+            player1Pivot.localScale = player1StartScale * (1 + 0.5f * switchAnimationCurve.Evaluate(t));
+            player2Pivot.localScale = player2StartScale * (1 + 0.5f * switchAnimationCurve.Evaluate(t));
             yield return null;
         }
 
