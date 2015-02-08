@@ -16,7 +16,8 @@ public class Character2DController : IPausable {
 			playerNumber_ = value;
 		}
 	}
-
+	//TODO fix hack
+	public MultiplayerController multiControllerHACK;
 	public GameObject characterMesh;
 	public bool moveOnlyIn2D = true;
 	public bool looksAtTarget = true;           
@@ -108,13 +109,23 @@ public class Character2DController : IPausable {
 				EventManager.PlayerDeath((int)playerNumber);
 				Debug.Log("playerNumber died: "+playerNumber);
 
+				//TODO: at least have an event here
+				StartCoroutine(delayRestartPlayers(1.5f));
 				return;
 			}
 		}
-	
-		
 	}
-	
+
+
+
+	private IEnumerator delayRestartPlayers(float time){
+
+		yield return new WaitForSeconds(time);
+		multiControllerHACK.setPauseCharacters(false);
+		multiControllerHACK.resetCharactersPosition();
+	}
+
+
 	public bool switchToPlayer(PlayerNumber number, Character2DController other, float delaySeconds){
 
 		if(number != playerNumber && !(switchInProgress || other.switchInProgress) && !isPaused){
@@ -138,7 +149,7 @@ public class Character2DController : IPausable {
 	}
 
 	//params PlayerNumber number, Character2DController other, float delaySeconds
-	public IEnumerator delaySwitch(object[] parms){
+	private IEnumerator delaySwitch(object[] parms){
 		PlayerNumber number = (PlayerNumber)parms[0];
 		Character2DController other = (Character2DController)parms[1];
 		float delaySeconds = (float)parms[2];
