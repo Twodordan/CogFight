@@ -14,6 +14,8 @@ public class ScoreManager : MonoBehaviour {
     private AudioSource playerDeathSource;
     private AudioSource playerSwitchSource;
 
+    public AnimationCurve switchAnimationCurve = new AnimationCurve();
+
     GameObject player1Object, player2Object;
 
     void Awake() {
@@ -57,13 +59,38 @@ public class ScoreManager : MonoBehaviour {
             player2Lives--;
         }
 
-        
         playerDeathSource.PlayOneShot(playerDeathSound);
+
+        if (player1Lives < 1 || player2Lives < 1) {
+            StateManager.State = GameState.Ended;
+        }
     }
 
     void OnPlayerSwitch() {
         playerSwitchSource.PlayOneShot(playerSwitchSound);
+
+        StartCoroutine(SwitchAnimation());
     }
+
+    IEnumerator SwitchAnimation() {
+        float startTime = Time.time;
+
+        Transform player1Pivot = player1Object.GetComponentInChildren<Transform>();
+        Vector3 player1StartScale = player1Pivot.localScale;
+        Transform player2Pivot = player2Object.GetComponentInChildren<Transform>();
+        Vector3 player2StartScale = player2Pivot.localScale;
+
+        while (Time.time > startTime + 0.25f) {
+            float t = (Time.time - startTime) / 0.25f;
+            player1Pivot.localScale = player1StartScale * (1 + switchAnimationCurve.Evaluate(t));
+            player2Pivot.localScale = player2StartScale * (1 + switchAnimationCurve.Evaluate(t));
+            yield return null;
+        }
+
+        player1Pivot.localScale = player1StartScale;
+        player2Pivot.localScale = player2StartScale;
+    }
+
 
     Rect player1ScoreBox = new Rect(0, 0, 100, 40);
     Rect player2ScoreBox = new Rect(Screen.width - 100, 0, 100, 40);
