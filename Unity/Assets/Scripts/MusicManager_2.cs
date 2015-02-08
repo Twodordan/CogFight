@@ -222,7 +222,7 @@ public class MusicManager_2 : MonoBehaviour {
         list.RemoveAt(0);
     }
 
-    void OnDestroy() {
+    void OnDisable() {
         StopAllCoroutines();
     }
 
