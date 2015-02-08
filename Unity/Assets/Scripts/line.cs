@@ -3,8 +3,14 @@ using System.Collections;
 
 public class line : MonoBehaviour {
 
-	private LineRenderer renderer;
+	public float thicknessAtBase = 0.7f;
+	public float thicknessAtMiddle = 1.2f;
+	public int divider = 10;
+
 	public Transform[] transforms;
+
+	private LineRenderer renderer;
+
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +25,6 @@ public class line : MonoBehaviour {
 
 
 		float distance = Vector3.Distance(transforms[0].position,transforms[1].position);
-		renderer.SetWidth(0.7f, 1.2f-(distance/10));
+		renderer.SetWidth(thicknessAtBase, thicknessAtMiddle-(distance/divider));
 	}
 }
