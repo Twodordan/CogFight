@@ -6,10 +6,15 @@ public class EventManager : MonoBehaviour {
     public delegate void BasicAction();
     public static event BasicAction OnGameStart;
     public static event BasicAction OnGameEnd;
+    public static event BasicAction OnGamePause;
     public static event BasicAction OnDifficultyChange;
 
-    public static event BasicAction OnMusic_Beat;
+    public delegate void IntegerAction(int n);
+    public static event IntegerAction OnMusic_Beat;
     public static event BasicAction OnMusic_Bar;
+
+    public static event IntegerAction OnMusic_ForeshadowBegin;
+    public static event IntegerAction OnMusic_ForeshadowConclusion;
 
     public delegate void PlayerDeathAction(int playerID);
     public static event PlayerDeathAction OnPlayerDeath;
@@ -18,15 +23,27 @@ public class EventManager : MonoBehaviour {
     public static event AudioStartAction OnMusic_StartNewClip;
 
     public static void StartGame() {
-        OnGameStart();
+        if (OnGameStart != null) {
+            OnGameStart();
+        }
     }
 
     public static void EndGame() {
-        OnGameEnd();
+        if (OnGameEnd != null) {
+            OnGameEnd();
+        }
+    }
+
+    public static void PauseGame() {
+        if (OnGamePause != null) {
+            OnGamePause();
+        }
     }
 
     public static void DifficultyChanged() {
-        OnDifficultyChange();
+        if (OnDifficultyChange != null) {
+            OnDifficultyChange();
+        }
     }
 
     public static void Music_NewClip(double syncTime, double clipLength) {
@@ -35,17 +52,33 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    public static void Music_Beat() {
+    public static void Music_Beat(int n) {
         if (OnMusic_Beat != null) {
-            OnMusic_Beat();
+            OnMusic_Beat(n);
         }
     }
 
     public static void Music_Bar() {
-        OnMusic_Bar();
+        if (OnMusic_Bar != null) {
+            OnMusic_Bar();
+        }
+    }
+
+    public static void Music_ForeshadowBegin(int id) {
+        if (OnMusic_ForeshadowBegin != null) {
+            OnMusic_ForeshadowBegin(id);
+        }
+    }
+
+    public static void Music_ForeshadowConclusion(int id) {
+        if (OnMusic_ForeshadowConclusion != null) {
+            OnMusic_ForeshadowConclusion(id);
+        }
     }
 
     public static void PlayerDeath(int playerID) {
-        OnPlayerDeath(playerID);
+        if (OnPlayerDeath != null) {
+            OnPlayerDeath(playerID);
+        }
     }
 }
