@@ -26,6 +26,11 @@ public class MultiplayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//TESTING TODO: remove
+
+		if(Input.GetButtonDown("Start")){
+			EventManager.StartGame();
+		}
+
 		if(Input.GetKeyDown(KeyCode.Space)){
 			EventManager.StartGame();
 			//pauseChars();
