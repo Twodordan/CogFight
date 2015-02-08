@@ -61,15 +61,15 @@ public class ScoreManager : MonoBehaviour {
 
     void OnGUI() {
         if (StateManager.State != GameState.Ended) {
-            GUI.Label(player1ScoreBox, "Player 1 lives: " + player1Lives.ToString());
-            GUI.Label(player2ScoreBox, "Player 2 lives: " + player2Lives.ToString());
+            GUI.Box(player1ScoreBox, "Player 1 lives: " + player1Lives.ToString());
+            GUI.Box(player2ScoreBox, "Player 2 lives: " + player2Lives.ToString());
         } else {
             if (player1Lives > player2Lives) {
-                GUI.Label(centerRect, "Player 1 wins!");
+                GUI.Box(centerRect, "Player 1 wins!");
             } else if (player1Lives == player2Lives) {
-                GUI.Label(centerRect, "Draw!");
+                GUI.Box(centerRect, "Draw!");
             } else {
-                GUI.Label(centerRect, "Player 2 wins!");
+                GUI.Box(centerRect, "Player 2 wins!");
             }
         }
     }
