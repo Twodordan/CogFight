@@ -63,8 +63,8 @@ public class MusicManager_2 : MonoBehaviour {
             newSource.clip = newTrack.clip;
             newSource.volume = newTrack.volume;
             newSource.PlayScheduled(initTime);
-            //newSource.SetScheduledStartTime(initTime);
-            newSource.SetScheduledEndTime(initTime + newSource.clip.samples);
+            newSource.SetScheduledStartTime(initTime);
+            newSource.SetScheduledEndTime(initTime + newSource.clip.length);
             newTrack.initTime = initTime;
 
             Debug.Log("New clip queued! Name: " + newTrack.name);
