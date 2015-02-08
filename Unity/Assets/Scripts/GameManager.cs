@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour {
 
     float startTime = 0f;
 
-    void Start() {
+    IEnumerator Start() {
         EventManager.OnGameStart += SetStartTime;
+
+        StateManager.Flags = StateFlags.ReadyForPlay;
+        yield break;
     }
 
     void FixedUpdate() {

@@ -90,7 +90,7 @@ public class Character2DController : IPausable {
 
 	public bool switchToPlayer(PlayerNumber number, Character2DController other, float delaySeconds){
 
-		if(number != playerNumber && !(switchInProgress || other.switchInProgress)){
+		if(number != playerNumber && !(switchInProgress || other.switchInProgress) && !isPaused){
 
 			switchInProgress_ = true;
 

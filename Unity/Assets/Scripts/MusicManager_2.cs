@@ -20,9 +20,11 @@ public class MusicManager_2 : MonoBehaviour {
 
     MusicWithInformation currentlyPlayingTrack;
     List<MusicWithInformation> currentTrackQueue = new List<MusicWithInformation>();
-    
+
     List<AudioSource> sources = new List<AudioSource>();
     List<AudioSourceController> foreshadowSourceControllers = new List<AudioSourceController>();
+
+    double initOfNextClip = 0.0;
 
     int beatNumber = 0;
     double lastBeatTime = 0;
@@ -67,6 +69,7 @@ public class MusicManager_2 : MonoBehaviour {
 
             CycleList(ref sources);
 
+            initOfNextClip = initTime;
             yield return new WaitForSeconds((float)(initTime - AudioSettings.dspTime - Time.fixedDeltaTime));
 
             beatNumber = 0;
@@ -79,16 +82,24 @@ public class MusicManager_2 : MonoBehaviour {
         }
     }
 
+    double GetTimeUntilNextClip() {
+        return initOfNextClip - AudioSettings.dspTime;
+    }
+
     MusicWithInformation GetNextBaseTrack() {
         MusicWithInformation result = null;
-        
+
         switch (StateManager.State) {
             case GameState.Beginning:
-                if (beginTrackIndex > beginTracks.Count - 1) {
+                Debug.Log("Flags here: " + StateManager.Flags);
+                if (StateManager.Flags == StateFlags.ReadyForPlay) {
                     EventManager.OnMusic_StartNewClip += QueuedEventSetStatePlaying;
                     result = trackList[0];
                     CycleList(ref trackList);
                 } else {
+                    if (beginTrackIndex > beginTracks.Count - 1) {
+                        beginTrackIndex = beginTracks.Count - 1;
+                    }
                     result = beginTracks[beginTrackIndex];
                     beginTrackIndex++;
                 }
@@ -109,11 +120,11 @@ public class MusicManager_2 : MonoBehaviour {
                 }
                 break;
         }
-        
+
         return result.Copy();
     }
 
-    
+
 
     // DEBUG
     void Update() {
