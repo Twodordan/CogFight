@@ -249,10 +249,6 @@ public class MusicManager_2 : MonoBehaviour {
         }
     }
 
-    void OnGUI() {
-        GUI.Label(new Rect(0, 0, 100, 100), ((beatNumber - 1) / 4 + 1).ToString());
-    }
-
     void TrimForeshadowSourceControllers() {
         List<AudioSourceController> removeList = new List<AudioSourceController>();
 
