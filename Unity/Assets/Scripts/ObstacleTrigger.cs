@@ -62,7 +62,7 @@ public class ObstacleTrigger : MonoBehaviour {
     IEnumerator PlayerDeathTimer(int id) {
         objectIDPairs.Clear();
         playerDeath = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         playerDeath = false;
         yield break;
     }
@@ -128,14 +128,14 @@ public class ObstacleTrigger : MonoBehaviour {
 
         float startTimeStamp = Time.time;
 
-        while (Time.time < startTimeStamp + spikeStabDuration) {
+        while (Time.time < startTimeStamp + spikeStabDuration && !playerDeath) {
             spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate((Time.time - startTimeStamp) / spikeStabDuration));
             yield return null;
         }
 
         startTimeStamp = Time.time;
 
-        while (Time.time < startTimeStamp + spikeRetractDuration) {
+        while (Time.time < startTimeStamp + spikeRetractDuration && !playerDeath) {
             spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate(1 - (Time.time - startTimeStamp) / spikeRetractDuration));
             yield return null;
         }
