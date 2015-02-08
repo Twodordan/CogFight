@@ -54,6 +54,8 @@ public class ScoreManager : MonoBehaviour {
     }
 
     void OnPlayerDeath(int playerID) {
+		//StartCoroutine(SwitchAnimationOnPlayer(playerID));
+
         if (playerID == 1) {
             player1Lives--;
         } else {
@@ -65,6 +67,8 @@ public class ScoreManager : MonoBehaviour {
         if (player1Lives < 1 || player2Lives < 1) {
             StateManager.State = GameState.Ended;
         }
+
+
     }
 
     void OnPlayerSwitch() {
@@ -102,16 +106,45 @@ public class ScoreManager : MonoBehaviour {
 
     void OnGUI() {
         if (StateManager.State != GameState.Ended) {
-            GUI.Box(player1ScoreBox, "P1 (Red) lives: " + player1Lives.ToString());
-            GUI.Box(player2ScoreBox, "P2 (Blue) lives: " + player2Lives.ToString());
+            GUI.Box(player1ScoreBox, "RED lives: " + player1Lives.ToString());
+            GUI.Box(player2ScoreBox, "BLUE lives: " + player2Lives.ToString());
         } else {
             if (player1Lives > player2Lives) {
-                GUI.Box(centerRect, "Player 1 (Red) wins!");
+                GUI.Box(centerRect, "RED wins!");
             } else if (player1Lives == player2Lives) {
                 GUI.Box(centerRect, "Draw!");
             } else {
-                GUI.Box(centerRect, "Player 2 (Blue) wins!");
+                GUI.Box(centerRect, "BLUE wins!");
             }
         }
     }
+
+	IEnumerator SwitchAnimationOnPlayer(int i) {
+		//Debug.Log("--------------------ANIMATE PLAYER : "+i);
+
+		GameObject thePlayer;
+
+		if(i==1){
+			thePlayer = player1Object;
+		}
+		else{
+			thePlayer = player2Object;
+		}
+
+		float startTime = Time.time;
+		
+		Transform player1Pivot = thePlayer.transform.GetChild(0);
+		Vector3 player1StartScale = player1Pivot.localScale;
+
+		
+		while (Time.time < startTime + 0.3f) {
+			float t = (Time.time - startTime) / 0.3f;
+			player1Pivot.localScale = player1StartScale * (1/(1 + switchAnimationCurve.Evaluate(t)));
+
+			yield return null;
+		}
+		
+		player1Pivot.localScale = player1StartScale;
+
+	}
 }
