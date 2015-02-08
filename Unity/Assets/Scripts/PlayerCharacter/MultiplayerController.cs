@@ -53,7 +53,7 @@ public class MultiplayerController : MonoBehaviour {
 
 			EventManager.TerminateLevel();
 			Debug.Log("_________________ TerminatingLevel");
-			StartCoroutine(delayLoadLevel(2));
+			StartCoroutine(delayLoadLevel(0));
 
 
 			//Application.loa
