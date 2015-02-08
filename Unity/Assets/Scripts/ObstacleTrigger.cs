@@ -8,6 +8,14 @@ public class ObstacleTrigger : MonoBehaviour {
 	public Spike spike;
 	public Material tileMaterial;
 	public Material warningMaterial;
+
+    public float spikeStabDuration = 0.4f;
+    public float spikeRetractDuration = 1.7f;
+    public float spikeDistance = 12f;
+    public float spikeStealthedY;
+    public AnimationCurve spikeMovementCurve = new AnimationCurve();
+    Coroutine spikeCoroutine = null;
+
 	private int activeTile;
 
 	private float i = 0f;
@@ -40,10 +48,12 @@ public class ObstacleTrigger : MonoBehaviour {
 	IEnumerator AnimateColor(float duration, GameObject objectToColor) {
 		float startTime = Time.time;
 
+        Color colorAtBeginning = objectToColor.renderer.material.color;
+
 		// Color more
 		while(Time.time < startTime + duration) {
 			float degree = (Time.time - startTime) / duration;
-			objectToColor.renderer.material.color = Color.Lerp(tileMaterial.color, warningMaterial.color, degree);
+            objectToColor.renderer.material.color = Color.Lerp(colorAtBeginning, warningMaterial.color, degree);
 			yield return null;
 		}
 
@@ -51,11 +61,11 @@ public class ObstacleTrigger : MonoBehaviour {
 		startTime = Time.time;
 		while(Time.time < startTime + 1.5f) {
 			float degree = (Time.time - startTime) / 1.5f;
-			objectToColor.renderer.material.color = Color.Lerp(warningMaterial.color, tileMaterial.color, degree);
+            objectToColor.renderer.material.color = Color.Lerp(warningMaterial.color, colorAtBeginning, degree);
 			yield return null;
 		}
 
-		objectToColor.renderer.material.color = tileMaterial.color;
+        objectToColor.renderer.material.color = colorAtBeginning;
 		yield break;
 	}
 
@@ -68,10 +78,36 @@ public class ObstacleTrigger : MonoBehaviour {
 			}
 		}
 
-		if (intendedGameObject != null) {
-			spike.ActivateStab(intendedGameObject.transform.position.x);
+		if (intendedGameObject != null && spikeCoroutine == null) {
+			//spike.ActivateStab(intendedGameObject.transform.position.x);
+            spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
 		}
 	}
+
+    IEnumerator AnimateSpike(float x) {
+        spikeStealthedY = spike.transform.position.y;
+
+        spike.transform.position = new Vector3(x, spikeStealthedY);
+
+        Vector3 startPosition = spike.transform.position;
+        Vector3 topPosition = startPosition + Vector3.up * spikeDistance;
+
+        float startTimeStamp = Time.time;
+
+        while (Time.time < startTimeStamp + spikeStabDuration) {
+            spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate((Time.time - startTimeStamp) / spikeStabDuration));
+            yield return null;
+        }
+
+        startTimeStamp = Time.time;
+
+        while (Time.time < startTimeStamp + spikeRetractDuration) {
+            spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate(1 - (Time.time - startTimeStamp) / spikeRetractDuration));
+            yield return null;
+        }
+        spikeCoroutine = null;
+        yield break;
+    }
 
 }
 
