@@ -32,6 +32,7 @@ public class Character2DController : IPausable {
 
 
 	private Character2DUserControl userControl;
+	[SerializeField]
 	private Character2DScriptControl scriptControl;
 	[SerializeField]
 	private Character2D character;
@@ -44,7 +45,7 @@ public class Character2DController : IPausable {
 
 	void Start () {
 		userControl = new Character2DUserControl();
-		scriptControl = new Character2DScriptControl();
+		//scriptControl = new Character2DScriptControl();
 
 		if(playerNumber_ == 0){
 			Debug.LogError("You must set the Player Number in the Inspector!");
@@ -78,11 +79,11 @@ public class Character2DController : IPausable {
 		userControl.solveInput(playerNumber, transform, looksAtTarget, lookAtTarget, 
 		                       out lookPos, out move, out jump);
 
-		//scriptControl.rubberBanding(out lookPos, out move);
 
 
 		character.Move(lookPos, move, jump);
 
+		scriptControl.rubberBanding(transform, playerIsAttachedTo);
 
 
 	}
