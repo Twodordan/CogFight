@@ -1,0 +1,33 @@
+Unity/Temp/UnityLockfile
+<<<<<<< HEAD
+Unity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll.mdb
+Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll.mdb
+=======
+Unity/Library/CurrentLayout.dwlt
+Unity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll.mdb
+Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll.mdb
+Unity/Library/assetDatabase3
+>>>>>>> master
+Unity/Library/expandedItems
+Unity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll
+Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll
+Unity/Library/metadata/
+Unity/Library/ScriptAssemblies/CompilationCompleted.txt
+Unity/Library/guidmapper
+Unity/Temp/
+Unity/_UpgradeReport_Files/
+*.sln
+*.csproj
+Unity/UpgradeLog.XML
+Unity/UpgradeLog.htm
+Unity/Library/ShaderCache.db
+Unity/Library/guidmapper
+*.unityproj
+Unity/Library/
+<<<<<<< HEAD
+Unity/Assembly-CSharp-firstpass-vs.csproj
+Unity/Assembly-CSharp-firstpass.csproj
+.gitignore.orig
+=======
+Unity/Temp/
+>>>>>>> origin/development
