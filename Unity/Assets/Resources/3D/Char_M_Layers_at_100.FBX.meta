@@ -1,0 +1,203 @@
+fileFormatVersion: 2
+guid: c7104dc22e1657a4c8a770898418f99d
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Back
+    100002: Back_Leaf
+    100004: BackLeft
+    100006: BackLeft_Leaf
+    100008: Char_M
+    100010: //RootNode
+    100012: Front
+    100014: Front_Leaf
+    100016: FrontRight
+    100018: FrontRight_Leaf
+    100020: Left
+    100022: LeftFront
+    100024: LeftFront_Leaf
+    100026: LeftLeaf
+    100028: Right
+    100030: Right_Leaf
+    100032: RightBack
+    100034: RightBack_Leaf
+    100036: Root
+    400000: Back
+    400002: Back_Leaf
+    400004: BackLeft
+    400006: BackLeft_Leaf
+    400008: Char_M
+    400010: //RootNode
+    400012: Front
+    400014: Front_Leaf
+    400016: FrontRight
+    400018: FrontRight_Leaf
+    400020: Left
+    400022: LeftFront
+    400024: LeftFront_Leaf
+    400026: LeftLeaf
+    400028: Right
+    400030: Right_Leaf
+    400032: RightBack
+    400034: RightBack_Leaf
+    400036: Root
+    2300000: Char_M
+    3300000: Char_M
+    4300000: Char_M
+    7400000: Take 001
+    7400002: Take 001 //// Root
+    7400004: Take 001 //// Back
+    7400006: Take 001 //// Back_Leaf
+    7400008: Take 001 //// BackLeft
+    7400010: Take 001 //// BackLeft_Leaf
+    7400012: Take 001 //// Left
+    7400014: Take 001 //// LeftLeaf
+    7400016: Take 001 //// LeftFront
+    7400018: Take 001 //// LeftFront_Leaf
+    7400020: Take 001 //// Front
+    7400022: Take 001 //// Front_Leaf
+    7400024: Take 001 //// FrontRight
+    7400026: Take 001 //// FrontRight_Leaf
+    7400028: Take 001 //// Right
+    7400030: Take 001 //// Right_Leaf
+    7400032: Take 001 //// RightBack
+    7400034: Take 001 //// RightBack_Leaf
+    9500000: //RootNode
+    11100000: //RootNode
+    11100002: Back
+    11100004: Back_Leaf
+    11100006: BackLeft
+    11100008: BackLeft_Leaf
+    11100010: Char_M
+    11100012: Front
+    11100014: Front_Leaf
+    11100016: FrontRight
+    11100018: FrontRight_Leaf
+    11100020: Left
+    11100022: LeftFront
+    11100024: LeftFront_Leaf
+    11100026: LeftLeaf
+    11100028: Right
+    11100030: Right_Leaf
+    11100032: RightBack
+    11100034: RightBack_Leaf
+    11100036: Root
+    13700000: Char_M
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 1
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Char_M
+        weight: 1
+      - path: Root
+        weight: 1
+      - path: Root/Back
+        weight: 1
+      - path: Root/Back/Back_Leaf
+        weight: 1
+      - path: Root/BackLeft
+        weight: 1
+      - path: Root/BackLeft/BackLeft_Leaf
+        weight: 1
+      - path: Root/Front
+        weight: 1
+      - path: Root/Front/Front_Leaf
+        weight: 1
+      - path: Root/FrontRight
+        weight: 1
+      - path: Root/FrontRight/FrontRight_Leaf
+        weight: 1
+      - path: Root/Left
+        weight: 1
+      - path: Root/Left/LeftLeaf
+        weight: 1
+      - path: Root/LeftFront
+        weight: 1
+      - path: Root/LeftFront/LeftFront_Leaf
+        weight: 1
+      - path: Root/Right
+        weight: 1
+      - path: Root/Right/Right_Leaf
+        weight: 1
+      - path: Root/RightBack
+        weight: 1
+      - path: Root/RightBack/RightBack_Leaf
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .0500000007
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
