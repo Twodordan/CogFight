@@ -3,7 +3,7 @@
 <head>
 		
         
-<title>CubeOfCubes - Voxels - L-system - Unity</title>
+<title>SoundBound - Nordic Game Jam 2015 - Unity</title>
 <meta charset="iso-8859-2">
         
 <script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
@@ -205,6 +205,24 @@
 		display: none;
 	}
 	
+	.lnk{
+
+		text-shadow: 0 0 10px rgba(255,255,255,1), 0 0 12px rgba(255,255,255,0.6), 0 0 16px rgba(255,255,255,0.5), 0 0 20px rgba(255,255,255,0.6);
+
+		background-color: rgba(255,255,255,0.35);
+		
+		font-weight: bold;
+	}
+	
+	.lnk:hover{
+		text-shadow: none;
+		color: rgba(255,255,255,0.95);
+	}
+	
+	.fullscr:hover{
+		font-weight: bold;
+	}
+	
 <!--
 	/* hide from ie on mac \*/
 		html {
@@ -295,9 +313,9 @@
 
     <div class="footer" id="info1">
         <!--span style="margin-left: -130px;">Unity Web Player</span-->
-        <span style="position: absolute; left: 3px;"></span><span  style="position: absolute; left: 50%; margin-left: -80px;"><b>SoundBound</b> </span>
+        <span style="position: absolute; left: 3px;"><a href="http://danishdragon.itch.io/sound-bound" class="lnk" >NGJ2015, SoundBound: Martin René Andersen, Tudor Berechet, Andreas Heinz, Morten Havmřller Laursen, Daniel Biserov Todorov</a> </span><span  style="position: absolute; left: 50%; margin-left: -80px;"><!--b>SoundBound</b--> </span>
 		<span style="float: left;"><small> </small></span>
-		<span style="float: right; padding-right: 20px; background-color: rgba(0, 0, 0, 0.35); padding: 3px; margin-top: -2px; margin-right: 3px; cursor: pointer;" onclick="hideFooter()">Click here to toggle Fullscreen.</span>
+		<span style="float: right; padding-right: 20px; background-color: rgba(0, 0, 0, 0.35); padding: 3px; margin-top: -2px; margin-right: 3px; cursor: pointer;" class="fullscr" onclick="hideFooter()">Click here to toggle Fullscreen.</span>
     </div>
 
 </body>

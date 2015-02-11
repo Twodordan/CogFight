@@ -223,6 +223,14 @@ public class MusicManager_2 : MonoBehaviour {
                 StateManager.State = GameState.Ended;
             }
         }
+		else
+		if (Input.GetButtonDown("Back") || Input.GetButtonDown("Start")) {
+			//it really sucks to wait after the game ends -- particularly if 
+			//you don't know that the game will auto-restart in a few seconds
+			Debug.Log("Force-Closed Game!");
+			Application.LoadLevel("StartMenu");
+		}
+
     }
 
     IEnumerator CallForeshadowBegin(double countdown, int id, double durationOfClip) {

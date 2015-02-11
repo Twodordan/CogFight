@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class StartMenuManager : MonoBehaviour {
 
-    Rect startGameButton = new Rect(Screen.width / 3f, Screen.height / 3f, Screen.width - 2 * Screen.width / 3f, Screen.height - 2 * Screen.height / 3f);
+    Rect startGameButton = new Rect(Screen.width / 3.5f, Screen.height / 2.5f, Screen.width - 2 * Screen.width / 3.5f, Screen.height - 2 * Screen.height / 2.5f);
 
     public float audioTimer = 1f;
 
@@ -18,7 +18,10 @@ public class StartMenuManager : MonoBehaviour {
     void OnGUI() {
 		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), backgroundTexture);
 
-        if (GUI.Button(startGameButton, "THERE IS ONLY ONE BUTTON\nAND IT STARTS THE GAME")) {
+        if (GUI.Button(startGameButton, "\nTHERE IS ONLY ONE BUTTON\nAND IT STARTS THE GAME\n\n" +
+        	"..but your controller also has buttons.\nLike Enter or Start.")
+		    || Input.GetButtonDown("Start")
+		    ) {
             audio.Play();
             StartCoroutine(LoadLevelDelayed(audioTimer));
         }

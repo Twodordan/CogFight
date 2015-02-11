@@ -4,21 +4,25 @@ using System.Collections.Generic;
 
 public class ObstacleTrigger : MonoBehaviour {
 
-	private GameObject[] tileArray;
+
 	//public Spike spike;
 
-    public GameObject spikePrefab;
+    public List<GameObject> spikePrefabs;
 
 	public Material tileMaterial;
 	public Material warningMaterial;
 
-    public float spikeStabDuration = 0.4f;
+	public List<float> spikeStabDurations;// = 0.4f;
     public float spikeRetractDuration = 1.7f;
-    public float spikeDistance = 12f;
-    private float spikeStealthedY = -7.91f;
+	public List<float> spikeDistances;
     public AnimationCurve spikeMovementCurve = new AnimationCurve();
-    Coroutine spikeCoroutine = null;
+    //Coroutine spikeCoroutine = null;
 
+	private float spikeStealthedY = -7.91f;
+
+	private GameObject[] tileArrayFloor;
+	private GameObject[] tileArrayWallL;
+	private GameObject[] tileArrayWallR;
 	private int activeTile;
 
 	private float i = 0f;
@@ -31,10 +35,18 @@ public class ObstacleTrigger : MonoBehaviour {
 
 	void Start() {
 		//Find all the tiles tagged with tiles (the ones beneath the players)
-		tileArray = GameObject.FindGameObjectsWithTag("Tile");
+		tileArrayFloor = GameObject.FindGameObjectsWithTag("Tile");
+		tileArrayWallL = GameObject.FindGameObjectsWithTag("TileL");
+		tileArrayWallR = GameObject.FindGameObjectsWithTag("TileR");
 
-		if (tileArray.Length == 0) {
+		if (tileArrayFloor.Length == 0) {
 			Debug.Log("No game objects are tagged with Tile");
+		}
+		if (tileArrayWallL.Length == 0) {
+			Debug.Log("No game objects are tagged with TileL");
+		}
+		if (tileArrayWallR.Length == 0) {
+			Debug.Log("No game objects are tagged with TileR");
 		}
 
         //spikeStealthedY = spike.transform.position.y;
@@ -47,12 +59,25 @@ public class ObstacleTrigger : MonoBehaviour {
 	}
 
 	void ForeshadowBegin (int id, double duration){
+		handleForeshadowBegin(tileArrayFloor, id, duration);
+		float rand = Random.Range(0.0f,1.0f);
+		Debug.Log(rand);
+		if(rand>0.5f){
+			handleForeshadowBegin(tileArrayWallL, id, duration);
+		}
+		else{
+			handleForeshadowBegin(tileArrayWallR, id, duration);
+		}
+	}
+
+	void handleForeshadowBegin(GameObject[] tileArray, int id, double duration){
+
 		GameObject chosenGameobject = tileArray[Random.Range(0,tileArray.Length-1)];
-
-        while (activeTiles.Contains(chosenGameobject)) {
-            chosenGameobject = tileArray[Random.Range(0, tileArray.Length-1)];
-        }
-
+		
+		while (activeTiles.Contains(chosenGameobject)) {
+			chosenGameobject = tileArray[Random.Range(0, tileArray.Length-1)];
+		}
+		
 		StartCoroutine(AnimateColor((float)duration, chosenGameobject));
 		objectIDPairs.Add (new GameObjectIDPair(chosenGameobject, id));
 	}
@@ -105,26 +130,48 @@ public class ObstacleTrigger : MonoBehaviour {
 	void ForeshadowConclusion (int id, double duration){
         if (!playerDeath) {
             GameObject intendedGameObject = null;
+			int wallCounter = 3;
             foreach (GameObjectIDPair objIDPair in objectIDPairs) {
                 if (objIDPair.id == id) {
+					wallCounter--;
                     intendedGameObject = objIDPair.obj;
-                    break;
+                    
+					//this is ..inelegant
+					if(intendedGameObject.transform.position.x == tileArrayWallL[0].transform.position.x){
+						
+						StartCoroutine(AnimateSpike(intendedGameObject.transform.position, Vector3.right, 
+						                            spikePrefabs[1], spikeDistances[1], spikeStabDurations[1], false));
+					}
+					else if(intendedGameObject.transform.position.x == tileArrayWallR[0].transform.position.x){
+						
+						StartCoroutine(AnimateSpike(intendedGameObject.transform.position, Vector3.left, 
+						                            spikePrefabs[1], spikeDistances[1], spikeStabDurations[1], false));
+					}
+					else{
+						StartCoroutine(AnimateSpike(intendedGameObject.transform.position, Vector3.up, 
+						                            spikePrefabs[0], spikeDistances[0], spikeStabDurations[0], true));
+					}
+
+					if(wallCounter<0){
+						break;
+					}
                 }
             }
 
+			/*
             if (intendedGameObject != null) {
                 //spike.ActivateStab(intendedGameObject.transform.position.x);
-                spikeCoroutine = StartCoroutine(AnimateSpike(intendedGameObject.transform.position.x));
-            }
+            }*/
         }
 	}
 
-    IEnumerator AnimateSpike(float x) {
-        GameObject spike = (GameObject)Instantiate(spikePrefab, new Vector3(x, spikeStealthedY), Quaternion.identity);
+	IEnumerator AnimateSpike(Vector3 spikeOrigin, Vector3 spikeDirection, 
+	                         GameObject spikePrefab, float spikeDistance, float spikeStabDuration, bool returns ) {
+		GameObject spike = (GameObject)Instantiate(spikePrefab, spikeOrigin, Quaternion.LookRotation(spikeDirection));
         //spike.transform.position = new Vector3(x, spikeStealthedY);
 
         Vector3 startPosition = spike.transform.position;
-        Vector3 topPosition = startPosition + Vector3.up * spikeDistance;
+		Vector3 topPosition = startPosition + spikeDirection * spikeDistance;
 
         float startTimeStamp = Time.time;
 
@@ -135,16 +182,17 @@ public class ObstacleTrigger : MonoBehaviour {
 
         startTimeStamp = Time.time;
 
-        while (Time.time < startTimeStamp + spikeRetractDuration && !playerDeath) {
-            spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate(1 - (Time.time - startTimeStamp) / spikeRetractDuration));
-            yield return null;
-        }
+		if(returns)
+	        while (Time.time < startTimeStamp + spikeRetractDuration && !playerDeath) {
+	            spike.transform.position = Vector3.Lerp(startPosition, topPosition, spikeMovementCurve.Evaluate(1 - (Time.time - startTimeStamp) / spikeRetractDuration));
+	            yield return null;
+	        }
 
         spike.transform.position = startPosition;
 
         Destroy(spike);
 
-        spikeCoroutine = null;
+        //spikeCoroutine = null;
         yield break;
     }
 

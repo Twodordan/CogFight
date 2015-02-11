@@ -144,9 +144,9 @@ public class Character2DController : IPausable {
 			//TODO: start to play swap animation
 
 			//swap the chars in the middle of the animation.
-			object[] parms = new object[3]{number, other, delaySeconds};
-			StartCoroutine(delaySwitch(parms));
-			//delaySwitch();
+
+			StartCoroutine(delaySwitch(number, other, delaySeconds));
+
 			
 			//note: this doesn't actually check if the swap was successful, but if the references are there it will certainly work.
 			return true;
@@ -156,15 +156,13 @@ public class Character2DController : IPausable {
 	}
 
 	//params PlayerNumber number, Character2DController other, float delaySeconds
-	private IEnumerator delaySwitch(object[] parms){
-		PlayerNumber number = (PlayerNumber)parms[0];
-		Character2DController other = (Character2DController)parms[1];
-		float delaySeconds = (float)parms[2];
+	private IEnumerator delaySwitch(PlayerNumber number, Character2DController other, float delaySeconds){
+
 		/*
 		Debug.Log("SWITCH in progress; number: "+number+"; != playerNumber: "+
 		          playerNumber+"; delaySeconds: "+delaySeconds+
 		          ";");
-		          */
+		 */         
 		yield return new WaitForSeconds(delaySeconds);
 
 		//swap mesh 
